@@ -1,0 +1,53 @@
+body {
+    font-family: arial;
+}
+
+#progressBar {
+    height: 50px;
+    width: 100%;
+    background-color: #e6e6e6;
+    position: relative;
+}
+
+#barTitle, #barInfo, #one, #two, #three {
+    position: absolute;
+    height: 50px;
+}
+
+#one {
+    background-color: #00ff00;
+}
+
+#two {
+    background-color: #ff3333;
+}
+
+#three {
+    background-color: #cc00ff;
+}
+
+#barInfo, #barTitle {
+    line-height: 50px;
+    font-size: 30px;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+}
+
+#barTitle {
+    text-align: center;
+    width: 40%;
+}
+
+#barInfo {
+    width: 95%;
+}
+
+.current {
+    float: left;
+}
+
+.goal {
+    float: right;
+}
