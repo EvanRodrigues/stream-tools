@@ -1,15 +1,16 @@
 //Stores the progress variable locally in the browser.
-function resetProgress () {
-    if (typeof(Storage) !== "undefined") {
+if (typeof(Storage) !== "undefined") {
+    if (reset_progress == true) {
+	console.log("resetting progress");
 	localStorage.setItem("progress", 0.0);
     }
-    else {
-	console.log("Browser does not support Web Storage");
-    }
+}
+else {
+    console.log("Browser does not support Web Storage");
 }
 
 
-//
+//formats the goal and progress to two decimal places to show cents.
 function formatNumber (number) {
     return number.toFixed(2);
 }
@@ -24,10 +25,28 @@ function fillBar(percent) {
     });
 }
 
+
+//Calculates the value of the sub event in dollars based on the user's sub_value.
+function calcSubs(sub_plan) {
+    if (sub_plan == "1000") {
+	progress = progress + sub_value;
+    }
+    else if (sub_plan == "2000") {
+	progress = progress + (sub_value * 2);
+    }
+    else {
+	progress = progress + (sub_value * 5);
+    }
+}
+
+
 var progress;
 
 $(document).ready(function () {
     progress = Number(localStorage.getItem("progress"));
+    percentage = Math.floor((progress/goal) * 100);
+    fillBar(percentage);
+
     $("#goalName").html(goal_name);
     $("#current").html("$" + formatNumber(progress));
     $("#goal").html("$" + formatNumber(goal));
@@ -40,38 +59,41 @@ const streamlabs = io(`https://sockets.streamlabs.com?token=${socketToken}`, {tr
 
 //Perform Action on event
 streamlabs.on('event', (eventData) => {
+    console.log(eventData);
+
     if (eventData.type === 'donation') {
 	//code to handle donation events
 	var amount = Number(eventData.message[0].amount);
 	progress = progress + amount;
-
-
-	percent = Math.floor((progress/goal) * 100);
-
-	$("#current").html("$" + formatNumber(progress));
-	fillBar(percent);
-
     }
     if (eventData.for === 'twitch_account') {
 	switch(eventData.type) {
         case 'subscription':
             //code to handle subscription events
-	    console.log(progress);
-	    console.log("Subscription!");
-	    console.log(eventData.message);
-            break;
+	    sub_plan = eventData.message[0].sub_plan;
+	    calcSubs(sub_plan);
+	    break;
 	case 'resub':
-	    console.log("Resub!");
-	    console.log(eventData.message);
+	    //code to handle resub events
+	    sub_plan = eventData.message[0].sub_plan;
+	    calcSubs(sub_plan);
 	    break;
 	case 'bits':
-	    console.log("bits!");
-	    console.log(eventData.message);
+	    //code to handle bit events
+	    var bit_amount = Number(eventData.message[0].amount);
+	    var amount = bit_amount / 100;
+	    progress = progress + amount;
 	    break;
 	default:
-            //default case
+            //handles all other events (follower, host, etc.)
             console.log("default case");
 	    console.log(eventData.message);
 	}
     }
+
+    //Update bar once progress is calculated.
+    percent = Math.floor((progress/goal) * 100);
+    $("#current").html("$" + formatNumber(progress));
+    localStorage.setItem("progress", progress);
+    fillBar(percent);
 });
