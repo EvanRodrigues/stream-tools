@@ -4,8 +4,10 @@
   </head>
 
   <body>
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js' type='text/javascript'></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js" type="text/javascript"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="ConnectionVars.js"></script>
+    <script src="settings.js"></script>
     <script src="bar.js"></script>
 
     <div id="progressBar">
@@ -17,12 +19,12 @@
       </div>
 
       <div id="barTitle">
-	<span>Taco Bell Trip</span>
+	<span id="goalName"></span>
       </div>
 
       <div id="barInfo">
-	<span class="current">$0.00</span>
-	<span class="goal">$10.00</span>
+	<span id="current"></span>
+	<span id="goal"></span>
       </div>
     </div>
   </body>

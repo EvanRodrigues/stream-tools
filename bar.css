@@ -14,6 +14,10 @@ body {
     height: 50px;
 }
 
+#one, #two, #three {
+    max-width: 100%;
+}
+
 #one {
     background-color: #00ff00;
 }
@@ -44,10 +48,10 @@ body {
     width: 95%;
 }
 
-.current {
+#current {
     float: left;
 }
 
-.goal {
+#goal {
     float: right;
 }
