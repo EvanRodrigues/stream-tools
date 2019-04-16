@@ -2,7 +2,7 @@
 if (typeof(Storage) !== "undefined") {
     if (reset_progress == true) {
 	console.log("resetting progress");
-	localStorage.setItem("progress", 0.0);
+	localStorage.setItem("progress", 0.00);
     }
 }
 else {
@@ -28,7 +28,7 @@ function fillBar(percent) {
 
 //Calculates the value of the sub event in dollars based on the user's sub_value.
 function calcSubs(sub_plan) {
-    if (sub_plan == "1000") {
+    if (sub_plan == "1000" || sub_plan == "Prime") {
 	progress = progress + sub_value;
     }
     else if (sub_plan == "2000") {
