@@ -2,7 +2,7 @@
 if (typeof(Storage) !== "undefined") {
     if (reset_progress == true) {
 	console.log("resetting progress");
-	localStorage.setItem("progress", 0.00);
+	localStorage.setItem("progress", starting_value);
     }
 }
 else {
