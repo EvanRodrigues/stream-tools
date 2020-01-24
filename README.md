@@ -39,4 +39,4 @@ If you want to reset your goal, set the reset progress variable in settings.js t
 * How to run jQuery animations one after the other (not simultaneously).
 * How to use local browser storage to store data on the front-end.
 * How to design a progress bar.
-* Got experience working with the StreamLabs Socket API.
+* How to work with the StreamLabs Socket API.
