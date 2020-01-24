@@ -1,0 +1,22 @@
+{
+  "name": "stream-goal",
+  "version": "1.0.0",
+  "description": "Stream goal bar ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EvanRodrigues/stream-goal.git"
+  },
+  "author": "Evan Rodrigues",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/EvanRodrigues/stream-goal/issues"
+  },
+  "homepage": "https://github.com/EvanRodrigues/stream-goal#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.2"
+  }
+}
