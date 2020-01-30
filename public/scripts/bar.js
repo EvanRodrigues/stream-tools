@@ -1,24 +1,14 @@
-//Stores the progress variable locally in the browser.
-if (typeof Storage !== "undefined") {
-    if (reset_progress == true) {
-        console.log("resetting progress");
-        localStorage.setItem("progress", starting_value);
-    }
-} else {
-    console.log("Browser does not support Web Storage");
-}
-
 //Gets data from txt file
 async function getData() {
-    const response = await fetch("data.txt", { mode: 'no-cors' });
-    const response_text = await response.text();
+    const response = await fetch("../data/data.json", { mode: 'no-cors' });
+    const json = await response.json();
 
-    const data_fields = response_text.split("\r\n");
-    const progress = parseInt(data_fields[0]);
-    const goal = parseInt(data_fields[1]);
-    const reset = data_fields[2];
+    //const data_fields = response_text.split("\r\n");
+    const progress = json["progress"];
+    const goal = json["goal"];
+    const name = json["name"];
 
-    const output = { "progress": progress, "goal": goal, "reset": reset }
+    const output = { "progress": progress, "goal": goal, "name": name }
     return output;
 }
 
@@ -50,15 +40,15 @@ function calcSubs(sub_plan) {
 var progress;
 
 $(document).ready(async function () {
-    //progress = Number(localStorage.getItem("progress"));
     const data = await getData()
     progress = data["progress"];
-    console.log(progress);
+    name = data["name"];
+    goal = data["goal"];
 
     percentage = Math.floor((progress / goal) * 100);
     fillBar(percentage);
 
-    $("#goalName").html(goal_name);
+    $("#goalName").html(name);
     $("#current").html("$" + formatNumber(progress));
     $("#goal").html("$" + formatNumber(goal));
 });
