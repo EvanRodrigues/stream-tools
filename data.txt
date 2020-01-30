@@ -1,4 +1,0 @@
-20
-255.5
-Test Goal
-false
