@@ -1,3 +1,5 @@
+WARNING: Documentation is out of date! I will be updating this in the coming weeks.
+
 # Stream Goal
 An OBS browser add-on to display a combination of bits, subscription earnings, and donations in one bar. StreamLabs has separate goal bars available as widgets, but there is no way to combine them through the StreamLabs dashboard.
 
