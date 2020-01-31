@@ -1,3 +1,27 @@
+//var that keeps track of progress on the front-end
+let progress;
+
+//Formats the goal and progress to two decimal places to show cents.
+function formatNumber(number) {
+    return number.toFixed(2);
+}
+
+//Ajax request to update data.json
+function UpdateProgress(progress) {
+    const json = { "progress": formatNumber(progress) };
+    const url = window.location.href;
+
+    $.ajax({
+        type: "POST",
+        url: url + "api/goal/updateProgress",
+        data: JSON.stringify(json),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (data) { },
+        failure: function (err) { console.log(err) }
+    })
+}
+
 //Gets data from txt file
 async function getData() {
     const response = await fetch("../data/data.json", { mode: 'no-cors' });
@@ -10,11 +34,6 @@ async function getData() {
 
     const output = { "progress": progress, "goal": goal, "name": name }
     return output;
-}
-
-//formats the goal and progress to two decimal places to show cents.
-function formatNumber(number) {
-    return number.toFixed(2);
 }
 
 //Animates the bars to the correct width of the container.
@@ -37,8 +56,7 @@ function calcSubs(sub_plan) {
     }
 }
 
-var progress;
-
+//Get data asynchronously when page loads
 $(document).ready(async function () {
     const data = await getData()
     progress = data["progress"];
@@ -62,6 +80,12 @@ const streamlabs = io(`https://sockets.streamlabs.com?token=${socketToken}`, {
 streamlabs.on("event", eventData => {
     console.log(eventData);
 
+    //Ignore stream labels general info messages
+    if (eventData.type == "streamlabels.underlying" || eventData.type == "streamlabels") {
+        return;
+    }
+
+    //If event is not a repeat
     if (!("repeat" in eventData.message[0])) {
         if (eventData.type === "donation") {
             //code to handle donation events
@@ -88,15 +112,14 @@ streamlabs.on("event", eventData => {
                     break;
                 default:
                     //handles all other events (follower, host, etc.)
-                    console.log("default case");
-                    console.log(eventData.message);
+                    break;
             }
         }
+        UpdateProgress(progress);
     }
 
     //Update bar once progress is calculated.
     percent = Math.floor((progress / goal) * 100);
     $("#current").html("$" + formatNumber(progress));
-    localStorage.setItem("progress", progress);
     fillBar(percent);
 });
