@@ -80,19 +80,17 @@ try { //development
 }
 catch (err) { //live
     const url = window.location.href;
-    let api_token = "";
 
     fetch(url + 'api/goal/accessToken')
         .then(response => {
             return response.json();
         })
         .then(json => {
-            api_token = json["token"];
-        })
-
-    streamlabs = io(`https://sockets.streamlabs.com?token=${api_token}`, {
-        transports: ["websocket"]
-    });
+            const api_token = json["token"];
+            streamlabs = io(`https://sockets.streamlabs.com?token=${api_token}`, {
+                transports: ["websocket"]
+            });
+        });
 }
 
 //Perform Action on event
