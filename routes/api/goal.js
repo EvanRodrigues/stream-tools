@@ -8,6 +8,12 @@ router.get('/', (req, res) => {
     res.json(goal);
 });
 
+router.get('/accessToken', (req, res) => {
+    const token = process.env.STREAMLABS_API_TOKEN;
+    const json_output = { "token": token };
+    res.json(json_output);
+})
+
 //Resets the goal to 0.
 router.get('/reset');
 
