@@ -73,12 +73,12 @@ $(document).ready(async function () {
 
 //Connect to socket
 let streamlabs;
-if (socketToken == null) {
+try {
     streamlabs = io(`https://sockets.streamlabs.com?token=${socketToken}`, {
         transports: ["websocket"]
     });
 }
-else {
+catch (err) {
     streamlabs = io(`https://sockets.streamlabs.com?token=${process.env.STREAMLABS_API_KEY}`, {
         transports: ["websocket"]
     });
