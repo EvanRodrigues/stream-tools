@@ -1,5 +1,7 @@
-//var that keeps track of progress on the front-end
+//var that keeps track of progress on the front-end.
 let progress;
+//streamlabs socket connection.
+let streamlabs;
 
 //Formats the goal and progress to two decimal places to show cents.
 function formatNumber(number) {
@@ -22,7 +24,7 @@ function UpdateProgress(progress) {
     })
 }
 
-//Gets data from txt file
+//Gets data from txt file.
 async function getData() {
     const response = await fetch("../data/data.json", { mode: 'no-cors' });
     const json = await response.json();
@@ -56,7 +58,7 @@ function calcSubs(sub_plan) {
     }
 }
 
-//Get data asynchronously when page loads
+//Get data asynchronously when page loads.
 $(document).ready(async function () {
     const data = await getData()
     progress = data["progress"];
@@ -71,12 +73,13 @@ $(document).ready(async function () {
     $("#goal").html("$" + formatNumber(goal));
 });
 
-//Connect to socket
-let streamlabs;
+//Connect to socket.
 try { //development 
     streamlabs = io(`https://sockets.streamlabs.com?token=${socketToken}`, {
         transports: ["websocket"]
     });
+
+    startSocket(streamlabs);
 }
 catch (err) { //live
     const url = window.location.href;
@@ -90,53 +93,57 @@ catch (err) { //live
             streamlabs = io(`https://sockets.streamlabs.com?token=${api_token}`, {
                 transports: ["websocket"]
             });
+
+            startSocket(streamlabs);
         });
 }
 
 //Perform Action on event
-streamlabs.on("event", eventData => {
-    console.log(eventData);
+function startSocket(streamlabs) {
+    streamlabs.on("event", eventData => {
+        console.log(eventData);
 
-    //Ignore stream labels general info messages
-    if (eventData.type == "streamlabels.underlying" || eventData.type == "streamlabels") {
-        return;
-    }
-
-    //If event is not a repeat
-    if (!("repeat" in eventData.message[0])) {
-        if (eventData.type === "donation") {
-            //code to handle donation events
-            var amount = Number(eventData.message[0].amount);
-            progress = progress + amount;
+        //Ignore stream labels general info messages
+        if (eventData.type == "streamlabels.underlying" || eventData.type == "streamlabels") {
+            return;
         }
-        if (eventData.for === "twitch_account") {
-            switch (eventData.type) {
-                case "subscription":
-                    //code to handle subscription events
-                    sub_plan = eventData.message[0].sub_plan;
-                    calcSubs(sub_plan);
-                    break;
-                case "resub":
-                    //code to handle resub events
-                    sub_plan = eventData.message[0].sub_plan;
-                    calcSubs(sub_plan);
-                    break;
-                case "bits":
-                    //code to handle bit events
-                    var bit_amount = Number(eventData.message[0].amount);
-                    var amount = bit_amount / 100;
-                    progress = progress + amount;
-                    break;
-                default:
-                    //handles all other events (follower, host, etc.)
-                    break;
+
+        //If event is not a repeat
+        if (!("repeat" in eventData.message[0])) {
+            if (eventData.type === "donation") {
+                //code to handle donation events
+                var amount = Number(eventData.message[0].amount);
+                progress = progress + amount;
             }
+            if (eventData.for === "twitch_account") {
+                switch (eventData.type) {
+                    case "subscription":
+                        //code to handle subscription events
+                        sub_plan = eventData.message[0].sub_plan;
+                        calcSubs(sub_plan);
+                        break;
+                    case "resub":
+                        //code to handle resub events
+                        sub_plan = eventData.message[0].sub_plan;
+                        calcSubs(sub_plan);
+                        break;
+                    case "bits":
+                        //code to handle bit events
+                        var bit_amount = Number(eventData.message[0].amount);
+                        var amount = bit_amount / 100;
+                        progress = progress + amount;
+                        break;
+                    default:
+                        //handles all other events (follower, host, etc.)
+                        break;
+                }
+            }
+            UpdateProgress(progress);
         }
-        UpdateProgress(progress);
-    }
 
-    //Update bar once progress is calculated.
-    percent = Math.floor((progress / goal) * 100);
-    $("#current").html("$" + formatNumber(progress));
-    fillBar(percent);
-});
+        //Update bar once progress is calculated.
+        percent = Math.floor((progress / goal) * 100);
+        $("#current").html("$" + formatNumber(progress));
+        fillBar(percent);
+    });
+}
