@@ -72,9 +72,17 @@ $(document).ready(async function () {
 });
 
 //Connect to socket
-const streamlabs = io(`https://sockets.streamlabs.com?token=${socketToken}`, {
-    transports: ["websocket"]
-});
+let streamlabs;
+if (socketToken == null) {
+    streamlabs = io(`https://sockets.streamlabs.com?token=${socketToken}`, {
+        transports: ["websocket"]
+    });
+}
+else {
+    streamlabs = io(`https://sockets.streamlabs.com?token=${process.env.STREAMLABS_API_KEY}`, {
+        transports: ["websocket"]
+    });
+}
 
 //Perform Action on event
 streamlabs.on("event", eventData => {
