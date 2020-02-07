@@ -1,10 +1,11 @@
 const express = require('express');
 
 class GoalController {
-    constructor(progress, goal, name) {
+    constructor(progress, goal, name, sub_val) {
         this.progress = progress;
         this.goal = goal;
         this.name = name;
+        this.sub_val = sub_val;
     }
 
     updateProgress(new_progress) {
@@ -19,7 +20,8 @@ class GoalController {
         return {
             progress: this.progress,
             goal: this.goal,
-            name: this.name
+            name: this.name,
+            sub_val: this.sub_val
         };
     }
 }

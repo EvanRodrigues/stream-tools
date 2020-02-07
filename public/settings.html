@@ -1,0 +1,59 @@
+<html>
+
+<head>
+    <link rel="stylesheet" href="../css/bar.css">
+</head>
+
+<body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js" type="text/javascript"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="scripts/settings.js"></script>
+
+    <div id="settingsForm">
+        <form>
+            <h4>Progress</h4>
+            <input id="progress" type="text">
+
+            <h4>Goal Target</h4>
+            <input id="goal_target" type="text">
+
+            <h4>Goal Name</h4>
+            <input id="goal_name" type="text">
+
+            <h4>Sub Value</h4>
+            <input id="sub_val" type="text">
+
+            <br> <br>
+            <input type="submit">
+        </form>
+    </div>
+
+    <script>
+        $("#settingsForm").submit(() => {
+            const url = window.location.origin
+            const progress = parseFloat($("#progress").val());
+            const goal_target = parseFloat($("#goal_target").val());
+            const goal_name = $("#goal_name").val();
+            const sub_val = parseFloat($("#sub_val").val());
+
+            const data = {
+                "progress": progress,
+                "goal": goal_target,
+                "name": goal_name,
+                "sub_val": sub_val
+            };
+
+            $.ajax({
+                type: "POST",
+                url: url + "/api/goal/update",
+                data: JSON.stringify(data),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) { window.location.href = url },
+                failure: function (err) { console.log(err) }
+            });
+        });
+    </script>
+</body>
+
+</html>

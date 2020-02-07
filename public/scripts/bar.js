@@ -2,6 +2,7 @@
 let progress;
 //streamlabs socket connection.
 let streamlabs;
+let sub_val;
 
 //Formats the goal and progress to two decimal places to show cents.
 function formatNumber(number) {
@@ -21,7 +22,7 @@ function UpdateProgress(progress) {
         dataType: "json",
         success: function (data) { },
         failure: function (err) { console.log(err) }
-    })
+    });
 }
 
 //Gets data from txt file.
@@ -29,12 +30,12 @@ async function getData() {
     const response = await fetch("../data/data.json", { mode: 'no-cors' });
     const json = await response.json();
 
-    //const data_fields = response_text.split("\r\n");
     const progress = json["progress"];
     const goal = json["goal"];
     const name = json["name"];
+    const sub_val = json["sub_val"];
 
-    const output = { "progress": progress, "goal": goal, "name": name }
+    const output = { "progress": progress, "goal": goal, "name": name, "sub_val": sub_val };
     return output;
 }
 
@@ -50,11 +51,11 @@ function fillBar(percent) {
 //Calculates the value of the sub event in dollars based on the user's sub_value.
 function calcSubs(sub_plan) {
     if (sub_plan == "1000" || sub_plan == "Prime") {
-        progress = progress + sub_value;
+        progress = progress + sub_val;
     } else if (sub_plan == "2000") {
-        progress = progress + sub_value * 2;
+        progress = progress + sub_val * 2;
     } else {
-        progress = progress + sub_value * 5;
+        progress = progress + sub_val * 5;
     }
 }
 
@@ -64,6 +65,7 @@ $(document).ready(async function () {
     progress = data["progress"];
     name = data["name"];
     goal = data["goal"];
+    sub_val = data["sub_val"];
 
     percentage = Math.floor((progress / goal) * 100);
     fillBar(percentage);
