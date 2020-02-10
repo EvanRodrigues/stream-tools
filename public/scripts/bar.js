@@ -16,7 +16,7 @@ function UpdateProgress(progress) {
 
     $.ajax({
         type: "POST",
-        url: url + "api/goal/updateProgress",
+        url: url + "api/goal/updateProgress/" + channel,
         data: JSON.stringify(json),
         contentType: "application/json; charset=utf-8",
         dataType: "json",
