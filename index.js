@@ -10,9 +10,10 @@ app.use(express.json());
 // DB Config
 let db;
 
-//Dev
-db = require('./config/keys').mongoURI;
-if (db == null) {
+try { //Dev
+    db = require('./config/keys').mongoURI;
+}
+catch (err) { //Live
     db = process.env.MONGO_URI;
 }
 
