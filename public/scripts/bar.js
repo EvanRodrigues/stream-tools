@@ -106,7 +106,7 @@ function startSocket(streamlabs) {
         console.log(eventData);
 
         //Ignore stream labels general info messages
-        if (eventData.type == "streamlabels.underlying" || eventData.type == "streamlabels") {
+        if (eventData.type == "streamlabels.underlying" || eventData.type == "streamlabels" || eventData.type == "reload.instant") {
             return;
         }
 

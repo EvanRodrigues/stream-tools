@@ -20,7 +20,7 @@ router.get('/', (req, res) => {
 //@desc     Get all goals
 //@access   Public
 //TODO      Could have this use twitch oauth to access the correct goal  
-router.get('/:channel', (req, res) => {
+router.get('/channel/:channel', (req, res) => {
     Goal.findOne({ channel: req.params.channel })
         .then(goal => res.json(goal));
 });
