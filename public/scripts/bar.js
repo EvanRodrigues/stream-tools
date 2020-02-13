@@ -81,7 +81,7 @@ $(document).ready(async function () {
         twitch_channel = channel;
     }
     catch (err) { //Live
-        getChannel();
+        await getChannel();
     }
 
     const data = await getData(twitch_channel);
