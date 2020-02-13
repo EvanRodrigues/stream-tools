@@ -1,5 +1,3 @@
-import { response } from "express";
-
 let progress; //Var that keeps track of progress on the front-end.
 let streamlabs; //Streamlabs socket connection.
 let sub_val; //Used to calculate subscription value
