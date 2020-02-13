@@ -1,3 +1,5 @@
+import { response } from "express";
+
 let progress; //Var that keeps track of progress on the front-end.
 let streamlabs; //Streamlabs socket connection.
 let sub_val; //Used to calculate subscription value
@@ -29,13 +31,11 @@ function UpdateProgress(progress) {
 async function getChannel() {
     const url = window.location.href + "api/goal/channel";
 
-    fetch(url)
-        .then(response => {
-            return response.json();
-        })
-        .then(json => {
-            twitch_channel = json["channel"];
-        });
+    const response = await fetch(url);
+    const json = await response.json();
+    const channel = json["channel"];
+
+    return channel;
 }
 
 
@@ -81,7 +81,7 @@ $(document).ready(async function () {
         twitch_channel = channel;
     }
     catch (err) { //Live
-        await getChannel();
+        twitch_channel = await getChannel();
     }
 
     const data = await getData(twitch_channel);
