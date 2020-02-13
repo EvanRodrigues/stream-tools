@@ -2,7 +2,6 @@ const express = require('express');
 const fs = require('fs');
 const router = express.Router();
 const GoalController = require('../../controllers/GoalController');
-let goal = require('../../public/data/data.json');
 
 //Goal Model
 const Goal = require('../../models/Goal');
@@ -16,14 +15,7 @@ router.get('/', (req, res) => {
 });
 
 
-//@route    GET api/goal/:channel
-//@desc     Get all goals
-//@access   Public
-//TODO      Could have this use twitch oauth to access the correct goal  
-router.get('/channel/:channel', (req, res) => {
-    Goal.findOne({ channel: req.params.channel })
-        .then(goal => res.json(goal));
-});
+
 
 
 //@route    POST api/goal
@@ -71,7 +63,27 @@ router.post('/updateProgress/:channel', (req, res) => {
     })
 
     res.json(curr_goal.toJSON());*/
-})
+});
+
+
+//@route    GET api/goal/channel
+//@desc     Gets the channel being used from env variable.
+//@access   Public
+router.get('/channel', (req, res) => {
+    const channel = process.env.CHANNEL;
+    const json_output = { "channel": channel };
+    res.json(json_output);
+});
+
+
+//@route    GET api/goal/channel/:channel
+//@desc     Get the goal object from the :channel
+//@access   Public
+//TODO      Could have this use twitch oauth to access the correct goal  
+router.get('/channel/:channel', (req, res) => {
+    Goal.findOne({ channel: req.params.channel })
+        .then(goal => res.json(goal));
+});
 
 
 //@route    GET api/goal/accessToken
@@ -82,7 +94,10 @@ router.get('/accessToken', (req, res) => {
     const token = process.env.STREAMLABS_API_TOKEN;
     const json_output = { "token": token };
     res.json(json_output);
-})
+});
+
+
+
 
 
 

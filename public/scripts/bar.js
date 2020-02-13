@@ -1,8 +1,7 @@
-//var that keeps track of progress on the front-end.
-let progress;
-//streamlabs socket connection.
-let streamlabs;
-let sub_val;
+let progress; //Var that keeps track of progress on the front-end.
+let streamlabs; //Streamlabs socket connection.
+let sub_val; //Used to calculate subscription value
+let twitch_channel; //Used to determine which goal object from the DB to use.
 
 //Formats the goal and progress to two decimal places to show cents.
 function formatNumber(number) {
@@ -16,7 +15,7 @@ function UpdateProgress(progress) {
 
     $.ajax({
         type: "POST",
-        url: url + "api/goal/updateProgress/" + channel,
+        url: url + "api/goal/updateProgress/" + twitch_channel,
         data: JSON.stringify(json),
         contentType: "application/json; charset=utf-8",
         dataType: "json",
@@ -25,9 +24,26 @@ function UpdateProgress(progress) {
     });
 }
 
-//Gets data from txt file.
-async function getData() {
-    const response = await fetch("../data/data.json", { mode: 'no-cors' });
+//Gets the channel name from the backend.
+//The channel is set with an environment variable.
+async function getChannel() {
+    const url = window.location.href + "api/goal/channel";
+
+    fetch(url)
+        .then(response => {
+            return response.json();
+        })
+        .then(json => {
+            twitch_channel = json["channel"];
+        });
+}
+
+
+//Gets data from backend.
+async function getData(twitch_channel) {
+    const api_url = window.location.href + "api/goal/channel/" + twitch_channel;
+
+    const response = await fetch(api_url, { mode: 'no-cors' });
     const json = await response.json();
 
     const progress = json["progress"];
@@ -61,7 +77,14 @@ function calcSubs(sub_plan) {
 
 //Get data asynchronously when page loads.
 $(document).ready(async function () {
-    const data = await getData()
+    try { //Dev
+        twitch_channel = channel;
+    }
+    catch (err) { //Live
+        getChannel();
+    }
+
+    const data = await getData(twitch_channel);
     progress = data["progress"];
     name = data["name"];
     goal = data["goal"];
@@ -76,7 +99,7 @@ $(document).ready(async function () {
 });
 
 //Connect to socket.
-try { //development 
+try { //Dev 
     streamlabs = io(`https://sockets.streamlabs.com?token=${socketToken}`, {
         transports: ["websocket"]
     });
@@ -111,7 +134,7 @@ function startSocket(streamlabs) {
         }
 
         //If event is not a repeat
-        if (!("repeat" in eventData.message[0])) {
+        if (("repeat" in eventData.message[0])) {
             if (eventData.type === "donation") {
                 //code to handle donation events
                 var amount = Number(eventData.message[0].amount);
