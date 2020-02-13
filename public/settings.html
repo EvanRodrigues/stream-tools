@@ -8,6 +8,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js" type="text/javascript"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="scripts/settings.js"></script>
+    <script src="scripts/ConnectionVars.js"></script>
 
     <div id="settingsForm">
         <form>
@@ -29,12 +30,22 @@
     </div>
 
     <script>
-        $("#settingsForm").submit(() => {
-            const url = window.location.origin
+        $("#settingsForm").submit(async (e) => {
+            e.preventDefault(); // allow for redirect on submit.
+
+            const url = window.location.origin;
+            let twitch_channel;
             const progress = parseFloat($("#progress").val());
             const goal_target = parseFloat($("#goal_target").val());
             const goal_name = $("#goal_name").val();
             const sub_val = parseFloat($("#sub_val").val());
+
+            try { //Dev
+                twitch_channel = channel;
+            }
+            catch (err) { //Live
+                twitch_channel = await getChannel(url);
+            }
 
             const data = {
                 "progress": progress,
@@ -45,12 +56,11 @@
 
             $.ajax({
                 type: "POST",
-                url: url + "/api/goal/update",
+                url: url + "/api/goal/update/" + twitch_channel,
                 data: JSON.stringify(data),
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
-                success: function (data) { window.location.href = url },
-                failure: function (err) { console.log(err) }
+                success: (data) => { window.location.href = url; }
             });
         });
     </script>
