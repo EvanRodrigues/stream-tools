@@ -1,0 +1,92 @@
+@import 'base';
+
+body {
+    background-color: $background-color;
+    width: 100%;
+    font-family: 'Roboto', sans-serif;
+}
+
+h1 {
+    color: $green;
+}
+
+#content {
+    width: 85%;
+    height: 100vh;
+    margin: auto;
+    background-color: $section-color;
+}
+
+#settings {
+    h4 {
+        color: $text-color;
+    }
+    
+    display: flex;
+    justify-content: space-around;
+}
+
+#formContainer {
+    width: 30%;
+    padding: 10px;
+
+    .barInput {
+        font-family: 'Roboto', sans-serif;
+        width: 100%;
+        height: 20px;
+        background-color: $section-color;
+        color: white;
+        border: none;
+    }
+
+    .barSubmit {
+        font-family: 'Roboto', sans-serif;
+        background-color: $green;
+        border: 1px solid $green;
+        padding: 5px;
+        border-radius: 2px;
+    }
+
+    .barSubmit:hover {
+        cursor: pointer;
+    }
+}
+
+#exampleBar, #formContainer {
+    min-height: 250px;
+    background-color: $background-color;
+}
+
+#exampleBar, #progressBar {
+    width: 55%;
+    height: 50px;
+}
+
+#progressBar {
+    position: relative;
+    width: 100%;
+    background-color: #e6e6e6;
+}
+
+#one, #two, #three {
+    height: 100%;
+    position: absolute;
+}
+
+#one {
+    width: 75%;
+    background-color: green;
+    z-index: 2;
+}
+
+#two {
+    width: 50%;
+    background-color: red;
+    z-index: 3;
+}
+
+#three {
+    width: 25%;
+    background-color: purple;
+    z-index: 4;
+}

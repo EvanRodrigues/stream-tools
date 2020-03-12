@@ -34,4 +34,6 @@ $(document).ready(async function () {
     }
 
     getGoal(twitch_channel, url);
+
+    //TODO: set text values on bar.
 });

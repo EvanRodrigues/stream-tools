@@ -1,0 +1,97 @@
+<html>
+
+<head>
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js" type="text/javascript"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="scripts/dashboard.js"></script>
+    <script src="scripts/ConnectionVars.js"></script>
+
+    <div id="content">
+        <div id="settings">
+            <div id="formContainer">
+                <h1>Goal Dashboard</h1>
+
+                <form>
+                    <h4>Progress</h4>
+                    <input id="progress" class="barInput" type="text">
+
+                    <h4>Goal Target</h4>
+                    <input id="goal_target" class="barInput" type="text">
+
+                    <h4>Goal Name</h4>
+                    <input id="goal_name" class="barInput" type="text">
+
+                    <h4>Sub Value</h4>
+                    <input id="sub_val" class="barInput" type="text">
+
+                    <br> <br>
+                    <input type="submit" class="barSubmit">
+                </form>
+            </div>
+
+            <div id="exampleBar">
+                <h1>Example Bar</h1>
+                <div id="progressBar">
+                    <div id="one">
+                    </div>
+                    <div id="two">
+                    </div>
+                    <div id="three">
+                    </div>
+
+                    <div id="barTitle">
+                        <span id="goalName"></span>
+                    </div>
+
+                    <div id="barInfo">
+                        <span id="current"></span>
+                        <span id="goal"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $("#settings").submit(async (e) => {
+            e.preventDefault(); // allow for redirect on submit.
+
+            const url = window.location.origin;
+            let twitch_channel;
+            const progress = parseFloat($("#progress").val());
+            const goal_target = parseFloat($("#goal_target").val());
+            const goal_name = $("#goal_name").val();
+            const sub_val = parseFloat($("#sub_val").val());
+
+            try { //Dev
+                twitch_channel = channel;
+            }
+            catch (err) { //Live
+                twitch_channel = await getChannel(url);
+            }
+
+            const data = {
+                "progress": progress,
+                "goal": goal_target,
+                "name": goal_name,
+                "sub_val": sub_val
+            };
+
+            $.ajax({
+                type: "POST",
+                url: url + "/api/goal/update/" + twitch_channel,
+                data: JSON.stringify(data),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: (data) => { window.location.href = url; }
+            });
+        });
+    </script>
+</body>
+
+</html>
