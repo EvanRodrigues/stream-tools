@@ -2,6 +2,7 @@
 
 <head>
     <link rel="stylesheet" href="../css/dashboard.css">
+    <link rel="stylesheet" href="../css/nav.css">
     <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
 </head>
 
@@ -12,11 +13,25 @@
     <script src="scripts/ConnectionVars.js"></script>
 
     <div id="content">
-        <div id="settings">
-            <div id="formContainer">
-                <h1>Goal Dashboard</h1>
+        <div id="banner">
+            <h1>Streamer Tools</h1>
+        </div>
 
-                <form>
+        <div id="nav">
+            <ul class="linkContainer">
+                <li class="navLink">Home</li>
+                <li class="navLink">Goal</li>
+                <li class="navLink">Emote Counter</li>
+                <li class="navLink">Foo</li>
+                <li class="navLink">Test</li>
+            </ul>
+        </div>
+
+        <div id="settings">
+            <div id="formContainer" class="formContainer">
+                <h1>Goal Settings</h1>
+
+                <form id="goalSettings">
                     <h4>Progress</h4>
                     <input id="progress" class="barInput" type="text">
 
@@ -29,69 +44,58 @@
                     <h4>Sub Value</h4>
                     <input id="sub_val" class="barInput" type="text">
 
-                    <br> <br>
-                    <input type="submit" class="barSubmit">
+                    <h4>Text Color</h4>
+                    <input id="text_color" class="inputColor" type="color">
+
+                    <h4>Empty Color</h4>
+                    <input id="empty_color" class="inputColor" type="color">
+
+                    <h4>Layer One Color</h4>
+                    <input id="one_color" class="inputColor" type="color">
+
+                    <h4>Layer Two Color</h4>
+                    <input id="two_color" class="inputColor" type="color">
+
+                    <h4>Layer Three Color</h4>
+                    <input id="three_color" class="inputColor" type="color">
                 </form>
+
+                <div class="sectionFooter">
+                    <button class="submitButton" id="submitGoalSettings">Submit</button>
+                </div>
             </div>
 
-            <div id="exampleBar">
-                <h1>Example Bar</h1>
-                <div id="progressBar">
-                    <div id="one">
-                    </div>
-                    <div id="two">
-                    </div>
-                    <div id="three">
-                    </div>
+            <div id="exampleBar" class="formContainer">
+                <div class="headerContainer">
+                    <h1>Example Bar</h1>
+                </div>
 
-                    <div id="barTitle">
-                        <span id="goalName"></span>
-                    </div>
+                <div id="barContainer">
+                    <div id="progressBar">
+                        <div id="one">
+                        </div>
+                        <div id="two">
+                        </div>
+                        <div id="three">
+                        </div>
 
-                    <div id="barInfo">
-                        <span id="current"></span>
-                        <span id="goal"></span>
+                        <div id="barTitle">
+                            <span id="goalName"></span>
+                        </div>
+
+                        <div id="barInfo">
+                            <span id="current"></span>
+                            <span id="goal"></span>
+                        </div>
                     </div>
+                </div>
+
+                <div class="sectionFooter">
+                    <button class="submitButton">Reset Bar</button>
                 </div>
             </div>
         </div>
     </div>
-
-    <script>
-        $("#settings").submit(async (e) => {
-            e.preventDefault(); // allow for redirect on submit.
-
-            const url = window.location.origin;
-            let twitch_channel;
-            const progress = parseFloat($("#progress").val());
-            const goal_target = parseFloat($("#goal_target").val());
-            const goal_name = $("#goal_name").val();
-            const sub_val = parseFloat($("#sub_val").val());
-
-            try { //Dev
-                twitch_channel = channel;
-            }
-            catch (err) { //Live
-                twitch_channel = await getChannel(url);
-            }
-
-            const data = {
-                "progress": progress,
-                "goal": goal_target,
-                "name": goal_name,
-                "sub_val": sub_val
-            };
-
-            $.ajax({
-                type: "POST",
-                url: url + "/api/goal/update/" + twitch_channel,
-                data: JSON.stringify(data),
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: (data) => { window.location.href = url; }
-            });
-        });
-    </script>
 </body>
 
 </html>
