@@ -1,0 +1,25 @@
+@import 'base';
+
+#nav {
+    height: 50px;
+    background-color: $background-color;
+    margin-bottom: 25px;
+}
+
+.linkContainer {
+    height: 100%;
+    padding-left: 10px;
+    padding-right: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navLink {
+    color: $blue;
+    list-style: none;
+}
+
+.navLink:hover {
+    text-decoration: underline;
+}

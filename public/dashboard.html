@@ -1,0 +1,101 @@
+<html>
+
+<head>
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link rel="stylesheet" href="../css/nav.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js" type="text/javascript"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="scripts/dashboard.js"></script>
+    <script src="scripts/ConnectionVars.js"></script>
+
+    <div id="content">
+        <div id="banner">
+            <h1>Streamer Tools</h1>
+        </div>
+
+        <div id="nav">
+            <ul class="linkContainer">
+                <li class="navLink">Home</li>
+                <li class="navLink">Goal</li>
+                <li class="navLink">Emote Counter</li>
+                <li class="navLink">Foo</li>
+                <li class="navLink">Test</li>
+            </ul>
+        </div>
+
+        <div id="settings">
+            <div id="formContainer" class="formContainer">
+                <h1>Goal Settings</h1>
+
+                <form id="goalSettings">
+                    <h4>Progress</h4>
+                    <input id="progress" class="barInput" type="text">
+
+                    <h4>Goal Target</h4>
+                    <input id="goal_target" class="barInput" type="text">
+
+                    <h4>Goal Name</h4>
+                    <input id="goal_name" class="barInput" type="text">
+
+                    <h4>Sub Value</h4>
+                    <input id="sub_val" class="barInput" type="text">
+
+                    <h4>Text Color</h4>
+                    <input id="text_color" class="inputColor" type="color">
+
+                    <h4>Empty Color</h4>
+                    <input id="empty_color" class="inputColor" type="color">
+
+                    <h4>Layer One Color</h4>
+                    <input id="one_color" class="inputColor" type="color">
+
+                    <h4>Layer Two Color</h4>
+                    <input id="two_color" class="inputColor" type="color">
+
+                    <h4>Layer Three Color</h4>
+                    <input id="three_color" class="inputColor" type="color">
+                </form>
+
+                <div class="sectionFooter">
+                    <button class="submitButton" id="submitGoalSettings">Submit</button>
+                </div>
+            </div>
+
+            <div id="exampleBar" class="formContainer">
+                <div class="headerContainer">
+                    <h1>Example Bar</h1>
+                </div>
+
+                <div id="barContainer">
+                    <div id="progressBar">
+                        <div id="one">
+                        </div>
+                        <div id="two">
+                        </div>
+                        <div id="three">
+                        </div>
+
+                        <div id="barTitle">
+                            <span id="goalName"></span>
+                        </div>
+
+                        <div id="barInfo">
+                            <span id="current"></span>
+                            <span id="goal"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sectionFooter">
+                    <button class="submitButton">Reset Bar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

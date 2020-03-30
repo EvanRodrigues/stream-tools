@@ -1,0 +1,49 @@
+$background-color: #181818;
+$section-color: rgba(33,33,33, 0.95);
+
+//$secondary-color: #468cde;
+//$green: #52d273;
+//$red: #e94f64;
+//$grey: #d6d8de;
+
+//$secondary-color: #468cde;
+$green: #00A300;
+$red: #FE2727;
+$yellow: #cc7000;
+$blue: #3ea6ff;
+//$grey: #d6d8de;
+
+$text-color: white;
+$dark-text-color: #181818;
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+#content {
+    padding-left: 25px;
+    padding-right: 25px;
+}
+
+#banner {
+    height: 100px;
+}
+
+.barSubmit, .submitButton {
+    font-family: 'Roboto', sans-serif;
+    background-color: $blue;
+    border: 1px solid $blue;
+    padding: 5px;
+    border-radius: 2px;
+    font-size: .9rem;
+    color: $dark-text-color;
+}
+
+.barSubmit:hover, .submitButton:hover {
+    cursor: pointer;
+}
+
+#sectionFooter {
+    height: 10%;
+}
