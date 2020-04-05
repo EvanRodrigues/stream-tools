@@ -1,9 +1,9 @@
-@import 'base';
+@import "base";
 
 body {
     background-color: $background-color;
     width: 100%;
-    font-family: 'Roboto', sans-serif;
+    font-family: "Roboto", sans-serif;
 }
 
 h1 {
@@ -24,7 +24,7 @@ h1 {
         color: $text-color;
         font-weight: normal;
     }
-    
+
     display: flex;
     justify-content: space-between;
 }
@@ -49,7 +49,7 @@ h1 {
     width: 30%;
 
     .barInput {
-        font-family: 'Roboto', sans-serif;
+        font-family: "Roboto", sans-serif;
         width: 100%;
         height: 20px;
         background-color: $section-color;
@@ -58,13 +58,15 @@ h1 {
     }
 }
 
-#exampleBar, #formContainer {
+#exampleBar,
+#formContainer {
     min-height: 250px;
     padding: 10px;
     background-color: $background-color;
 }
 
-#exampleBar, #progressBar {
+#exampleBar,
+#progressBar {
     width: 55%;
     height: 50px;
 }
@@ -94,7 +96,8 @@ h1 {
     align-items: center;
 }
 
-#barInfo, #barTitle {
+#barInfo,
+#barTitle {
     line-height: 50px;
     font-size: 30px;
     margin-left: auto;
@@ -103,7 +106,11 @@ h1 {
     right: 0;
 }
 
-#barTitle, #barInfo, #one, #two, #three {
+#barTitle,
+#barInfo,
+#one,
+#two,
+#three {
     height: 100%;
     position: absolute;
 }
