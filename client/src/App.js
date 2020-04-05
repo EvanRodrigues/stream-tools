@@ -1,10 +1,11 @@
 import React from "react";
 import "./App.css";
+import GoalBar from "./pages/GoalBar";
 
 function App() {
     return (
         <div className="App">
-            <h1>Hello World!</h1>
+            <GoalBar />
         </div>
     );
 }

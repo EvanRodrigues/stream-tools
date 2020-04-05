@@ -1,11 +1,13 @@
 const path = require("path");
 const mongoose = require("mongoose");
+const cors = require("cors");
 const express = require("express"),
     app = express(),
     port = process.env.PORT || 5000;
 
 //Body parser middleware
 app.use(express.json());
+app.use(cors());
 
 // DB Config
 const db = process.env.MONGO_URI || require("./config/keys").mongoURI;
@@ -14,7 +16,7 @@ const db = process.env.MONGO_URI || require("./config/keys").mongoURI;
 mongoose
     .connect(db, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log("MongoDB Connected..."))
-    .catch(err => console.log(err));
+    .catch((err) => console.log(err));
 
 //Serve static assets if in production
 if (process.env.NODE_ENV === "production") {
