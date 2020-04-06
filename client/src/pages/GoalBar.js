@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Transition } from "react-transition-group";
 import "../stylesheets/css/bar.css";
 import { socketToken } from "../config/ConnectionVars";
 
@@ -9,12 +10,17 @@ class GoalBar extends Component {
             progress: 0,
             goal: 0,
             goalName: "",
+            animatedBar: false,
             //Formats the goal and progress to two decimal places to show cents.
             formatToDollars: function (number) {
                 return `$${number.toFixed(2)}`;
             },
         };
     }
+
+    limitWidth = (width) => {
+        return width > 100 ? 100 : width;
+    };
 
     //Calculates the value of the sub event in dollars based on the sub_plan.
     calcSubs = (subPlan) => {
@@ -122,14 +128,96 @@ class GoalBar extends Component {
         const goalName = this.state.goalName;
         const formatToDollars = this.state.formatToDollars;
 
+        if (this.state.animatedBar === false) {
+            setTimeout(
+                () => this.setState({ ...this.state, animatedBar: true }),
+                500
+            );
+        }
+
+        const duration = 1000;
+        const firstLayerDefault = {
+            transition: `width ${duration}ms`,
+            width: "0%",
+        };
+        const secondLayerDefault = {
+            transition: `width ${duration}ms`,
+            width: "0%",
+        };
+        const thirdLayerDefault = {
+            transition: `width ${duration}ms`,
+            width: "0%",
+        };
+
+        const firstStyles = {
+            entering: { width: "0%" },
+            entered: { width: `${this.limitWidth((progress / goal) * 100)}%` },
+            exiting: { width: `0%` },
+            exited: { width: "0%" },
+        };
+
+        const secondStyles = {
+            entering: { width: "0%" },
+            entered: {
+                width: `${this.limitWidth((progress / goal) * 100 - 100)}%`,
+            },
+            exiting: {
+                width: `0%`,
+            },
+            exited: { width: "0%" },
+        };
+
+        const thirdStyles = {
+            entering: { width: "0%" },
+            entered: {
+                width: `${this.limitWidth((progress / goal) * 100 - 200)}%`,
+            },
+            exiting: {
+                width: `0%`,
+            },
+            exited: { width: "0%" },
+        };
+
         if (goalName === "") {
             return <></>;
         }
         return (
             <div id="progressBar">
-                <div id="one"></div>
-                <div id="two"></div>
-                <div id="three"></div>
+                <Transition in={this.state.animatedBar} timeout={0}>
+                    {(state) => (
+                        <div
+                            id="one"
+                            style={{
+                                ...firstLayerDefault,
+                                ...firstStyles[state],
+                            }}
+                        ></div>
+                    )}
+                </Transition>
+
+                <Transition in={this.state.animatedBar} timeout={1000}>
+                    {(state) => (
+                        <div
+                            id="two"
+                            style={{
+                                ...secondLayerDefault,
+                                ...secondStyles[state],
+                            }}
+                        ></div>
+                    )}
+                </Transition>
+
+                <Transition in={this.state.animatedBar} timeout={2000}>
+                    {(state) => (
+                        <div
+                            id="three"
+                            style={{
+                                ...thirdLayerDefault,
+                                ...thirdStyles[state],
+                            }}
+                        ></div>
+                    )}
+                </Transition>
 
                 <div id="barTitle">
                     <span id="goalName">{goalName}</span>
