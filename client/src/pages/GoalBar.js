@@ -1,7 +1,20 @@
 import React, { Component } from "react";
 import { Transition } from "react-transition-group";
 import "../stylesheets/css/bar.css";
-import { socketToken } from "../config/ConnectionVars";
+
+let socketToken;
+
+/*
+ * Update this to always fetch token from db.
+ */
+try {
+    //dev
+    socketToken = require("../config/ConnectionVars").socketToken;
+} catch (err) {
+    //live
+    //fetch token from db
+    socketToken = "hello";
+}
 
 class GoalBar extends Component {
     constructor() {
@@ -104,6 +117,7 @@ class GoalBar extends Component {
 
     componentDidMount() {
         const io = require("socket.io-client");
+
         const socket = io(
             `https://sockets.streamlabs.com?token=${socketToken}`
         );
