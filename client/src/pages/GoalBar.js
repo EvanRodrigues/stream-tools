@@ -2,24 +2,16 @@ import React, { Component } from "react";
 import { Transition } from "react-transition-group";
 import "../stylesheets/css/bar.css";
 
-let socketToken;
-
-/*
- * Update this to always fetch token from db.
- */
-try {
-    //dev
-    socketToken = require("../config/ConnectionVars").socketToken;
-} catch (err) {
-    //live
-    //fetch token from db
-    socketToken = "hello";
-}
+const url =
+    window.location.origin === "http://localhost:3000"
+        ? "http://localhost:5000" //dev
+        : window.location.origin; //live
 
 class GoalBar extends Component {
     constructor() {
         super();
         this.state = {
+            channel: "",
             progress: 0,
             goal: 0,
             goalName: "",
@@ -31,6 +23,7 @@ class GoalBar extends Component {
         };
     }
 
+    //Sets a limit of 100% width for each layer of the GoalBar.
     limitWidth = (width) => {
         return width > 100 ? 100 : width;
     };
@@ -50,9 +43,9 @@ class GoalBar extends Component {
         this.setState({ ...this.state, progress: currentProgress });
     };
 
-    //Ajax request to update data.json
+    //Fetch call to update the goal's progress.
     updateProgress = (progress) => {
-        fetch(`http://localhost:5000/api/goal/updateProgress/doopian`, {
+        fetch(`${url}/api/goal/updateProgress/${this.state.channel}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -61,78 +54,17 @@ class GoalBar extends Component {
         });
     };
 
-    handleSocketEvent = (eventData) => {
-        let amount;
-
-        //Ignore stream labels general info messages
-        if (
-            eventData.type === "streamlabels.underlying" ||
-            eventData.type === "streamlabels" ||
-            eventData.type === "reload.instant"
-        ) {
-            return;
-        }
-
-        //If event is not a repeat
-        if ("repeat" in eventData.message[0]) {
-            if (eventData.type === "donation") {
-                //code to handle donation events
-                amount = Number(eventData.message[0].amount);
-                this.setState({
-                    ...this.state,
-                    progress: this.state.progress + amount,
-                });
-            }
-            if (eventData.for === "twitch_account") {
-                let subPlan = 0;
-
-                switch (eventData.type) {
-                    case "subscription":
-                        //code to handle subscription events
-                        subPlan = eventData.message[0].sub_plan;
-                        this.calcSubs(subPlan);
-                        break;
-                    case "resub":
-                        //code to handle resub events
-                        subPlan = eventData.message[0].sub_plan;
-                        this.calcSubs(subPlan);
-                        break;
-                    case "bits":
-                        //code to handle bit events
-                        const bit_amount = Number(eventData.message[0].amount);
-                        amount = bit_amount / 100;
-                        this.setState({
-                            ...this.state,
-                            progress: this.state.progress + amount,
-                        });
-                        break;
-                    default:
-                        //handles all other events (follower, host, etc.)
-                        break;
-                }
-            }
-            this.updateProgress(this.state.progress);
-        }
-    };
-
     componentDidMount() {
-        const io = require("socket.io-client");
-
-        const socket = io(
-            `https://sockets.streamlabs.com?token=${socketToken}`
-        );
-
-        socket.on("event", (eventData) => {
-            console.log(eventData);
-            this.handleSocketEvent(eventData);
-        });
-
-        fetch(`http://localhost:5000/api/goal`)
+        fetch(`${url}/api/goal`)
             .then((response) => response.json())
             .then((json) => {
+                //Set up component level state.
+                this.setState({ ...this.state, channel: json[0]["channel"] });
                 this.setState({ ...this.state, progress: json[0]["progress"] });
                 this.setState({ ...this.state, goal: json[0]["goal"] });
                 this.setState({ ...this.state, goalName: json[0]["name"] });
+
+                fetch(`${url}/api/goal/openSocket/${json[0]["channel"]}`);
             });
     }
 
@@ -143,10 +75,13 @@ class GoalBar extends Component {
         const formatToDollars = this.state.formatToDollars;
 
         if (this.state.animatedBar === false) {
-            setTimeout(
-                () => this.setState({ ...this.state, animatedBar: true }),
-                500
-            );
+            setTimeout(() => {
+                this.setState({ ...this.state, animatedBar: true });
+                // socket.on("event", (eventData) => {
+                //     console.log(eventData);
+                //     this.handleSocketEvent(eventData);
+                // });
+            }, 500);
         }
 
         const duration = 1000;
