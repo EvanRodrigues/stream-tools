@@ -1,13 +1,45 @@
-const io = require("socket.io-client");
+const socketIoClient = require("socket.io-client");
+const app = require("express")();
+const http = require("http").createServer(app);
+const socketIoServer = require("socket.io")(http);
 
-const openSockets = {};
+//token, socket
+let streamLabsSockets = {};
+
+//token, socket
+let clients = {};
+
+socketIoServer.on("connection", (socket) => {
+    const token = socket.handshake.query.token;
+
+    if (clients[token] == null) {
+        clients[token] = [socket];
+    } else clients[token].push(socket);
+
+    console.log(socket.handshake.query.token);
+
+    socket.on("disconnect", () => {
+        console.log("a user disconnected!");
+    });
+
+    console.log("a user connected!");
+});
+
+http.listen(3001, () => {
+    console.log("listening on *:3001");
+});
+
+//Calculates the value of the sub event in dollars based on the sub_plan.
+calcSubs = (subPlan) => {
+    if (subPlan === "1000" || subPlan === "Prime") return 5;
+    else if (subPlan === "2000") return 10;
+    else return 25;
+};
 
 //Event handler for the StreamLabs socket api.
 handleSocketEvent = (eventData) => {
     let amount;
     let isRepeat;
-
-    console.log(eventData);
 
     //Ignore stream labels general info messages.
     if (
@@ -25,14 +57,10 @@ handleSocketEvent = (eventData) => {
 
     //If event is not a repeat.
     if (!!("repeat" in eventData.message[0])) {
-        if (eventData.type === "donation") {
+        if (eventData.type === "donation")
             //code to handle donation events.
             amount = Number(eventData.message[0].amount);
-            this.setState({
-                ...this.state,
-                progress: this.state.progress + amount,
-            });
-        }
+
         if (eventData.for === "twitch_account") {
             let subPlan = 0;
 
@@ -40,37 +68,38 @@ handleSocketEvent = (eventData) => {
                 case "subscription":
                     //code to handle subscription events.
                     subPlan = eventData.message[0].sub_plan;
-                    this.calcSubs(subPlan);
+                    amount = calcSubs(subPlan);
                     break;
                 case "resub":
                     //code to handle resub events.
                     subPlan = eventData.message[0].sub_plan;
-                    this.calcSubs(subPlan);
+                    amount = calcSubs(subPlan);
                     break;
                 case "bits":
                     //code to handle bit events.
                     const bit_amount = Number(eventData.message[0].amount);
                     amount = bit_amount / 100;
-                    this.setState({
-                        ...this.state,
-                        progress: this.state.progress + amount,
-                    });
                     break;
                 default:
                     //handles all other events (follower, host, etc.)
                     break;
             }
         }
-        this.updateProgress(this.state.progress);
+
+        //TODO: match client with correct socket.
+        clients[1].forEach((socket) => {
+            console.log(socket);
+            socket.emit("event", { amount: amount });
+        });
     }
 };
 
 module.exports.setUpSocket = (id) => {
-    const socket = io.connect(`https://sockets.streamlabs.com?token=${id}`);
+    const socket = socketIoClient.connect(
+        `https://sockets.streamlabs.com?token=${id}`
+    );
 
-    console.log(id);
-
-    if (openSockets[id] != null) {
+    if (streamLabsSockets[id] != null) {
         return;
     }
 
@@ -81,7 +110,7 @@ module.exports.setUpSocket = (id) => {
         handleSocketEvent(eventData);
     });
 
-    socket.on("disconnect", () => {});
+    socket.on("disconnect", () => console.log("disconnected"));
 
-    openSockets[id] = socket;
+    streamLabsSockets[id] = socket;
 };

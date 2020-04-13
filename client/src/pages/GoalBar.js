@@ -1,11 +1,19 @@
 import React, { Component } from "react";
 import { Transition } from "react-transition-group";
+import io from "socket.io-client";
 import "../stylesheets/css/bar.css";
 
 const url =
     window.location.origin === "http://localhost:3000"
         ? "http://localhost:5000" //dev
         : window.location.origin; //live
+
+const socketUrl =
+    window.location.origin === "http://localhost:3000"
+        ? "http://localhost:3001/" //dev
+        : window.location.origin + ":3001/"; //live
+
+let socket;
 
 class GoalBar extends Component {
     constructor() {
@@ -28,21 +36,6 @@ class GoalBar extends Component {
         return width > 100 ? 100 : width;
     };
 
-    //Calculates the value of the sub event in dollars based on the sub_plan.
-    calcSubs = (subPlan) => {
-        let currentProgress = this.state.progress;
-
-        if (subPlan === "1000" || subPlan === "Prime") {
-            currentProgress += 5;
-        } else if (subPlan === "2000") {
-            currentProgress += 10;
-        } else {
-            currentProgress += 25;
-        }
-
-        this.setState({ ...this.state, progress: currentProgress });
-    };
-
     //Fetch call to update the goal's progress.
     updateProgress = (progress) => {
         fetch(`${url}/api/goal/updateProgress/${this.state.channel}`, {
@@ -55,6 +48,15 @@ class GoalBar extends Component {
     };
 
     componentDidMount() {
+        //TODO: Dynamic routes for tokens.
+        const token = Math.floor(Math.random() * 2);
+
+        socket = io(`${socketUrl}?token=${token}`);
+
+        socket.on("event", (eventData) => {
+            console.log(eventData);
+        });
+
         fetch(`${url}/api/goal`)
             .then((response) => response.json())
             .then((json) => {
@@ -77,10 +79,6 @@ class GoalBar extends Component {
         if (this.state.animatedBar === false) {
             setTimeout(() => {
                 this.setState({ ...this.state, animatedBar: true });
-                // socket.on("event", (eventData) => {
-                //     console.log(eventData);
-                //     this.handleSocketEvent(eventData);
-                // });
             }, 500);
         }
 
