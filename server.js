@@ -18,6 +18,9 @@ mongoose
     .then(() => console.log("MongoDB Connected..."))
     .catch((err) => console.log(err));
 
+//Get api routes.
+app.use("/api/goal", require("./routes/api/goal"));
+
 //Serve static assets if in production
 if (process.env.NODE_ENV === "production") {
     app.use(express.static("client/build"));
