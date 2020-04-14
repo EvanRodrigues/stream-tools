@@ -1,33 +1,7 @@
 const socketIoClient = require("socket.io-client");
-const app = require("express")();
-const http = require("http").createServer(app);
-const socketIoServer = require("socket.io")(http);
 
 //token, socket
 let streamLabsSockets = {};
-
-//token, socket
-let clients = {};
-
-socketIoServer.on("connection", (socket) => {
-    const token = socket.handshake.query.token;
-
-    if (clients[token] == null) {
-        clients[token] = [socket];
-    } else clients[token].push(socket);
-
-    console.log(socket.handshake.query.token);
-
-    socket.on("disconnect", () => {
-        console.log("a user disconnected!");
-    });
-
-    console.log("a user connected!");
-});
-
-http.listen(3001, () => {
-    console.log("listening on *:3001");
-});
 
 //Calculates the value of the sub event in dollars based on the sub_plan.
 calcSubs = (subPlan) => {
@@ -86,11 +60,7 @@ handleSocketEvent = (eventData) => {
             }
         }
 
-        //TODO: match client with correct socket.
-        clients[1].forEach((socket) => {
-            console.log(socket);
-            socket.emit("event", { amount: amount });
-        });
+        //TODO: send amount to second project socket.
     }
 };
 

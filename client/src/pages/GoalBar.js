@@ -8,10 +8,7 @@ const url =
         ? "http://localhost:5000" //dev
         : window.location.origin; //live
 
-const socketUrl =
-    window.location.origin === "http://localhost:3000"
-        ? "http://localhost:3001/" //dev
-        : window.location.origin + ":3001/"; //live
+const socketUrl = "https://stream-tools-socket.herokuapp.com/";
 
 let socket;
 
@@ -51,7 +48,10 @@ class GoalBar extends Component {
         //TODO: Dynamic routes for tokens.
         const token = Math.floor(Math.random() * 2);
 
-        socket = io(`${socketUrl}?token=${token}`);
+        //socket = io("http://localhost:5001?token=123");
+        socket = io(`${socketUrl}`);
+
+        console.log(`${socketUrl}`);
 
         socket.on("event", (eventData) => {
             console.log(eventData);
