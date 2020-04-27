@@ -1,17 +1,21 @@
 const socketIoClient = require("socket.io-client");
+const providerToken =
+    process.env.PROVIDER_TOKEN || require("./config/keys").PROVIDER_TOKEN;
+const providerUrl =
+    process.env.PROVIDER_URL || require("./config/keys").PROVIDER_URL;
 
 //token, socket
-let streamLabsSockets = {};
+let streamLabsSockets = new Map();
 
 //Calculates the value of the sub event in dollars based on the sub_plan.
-calcSubs = (subPlan) => {
+const calcSubs = (subPlan) => {
     if (subPlan === "1000" || subPlan === "Prime") return 5;
     else if (subPlan === "2000") return 10;
     else return 25;
 };
 
 //Event handler for the StreamLabs socket api.
-handleSocketEvent = (eventData) => {
+const handleSocketEvent = (eventData, id) => {
     let amount;
     let isRepeat;
 
@@ -60,27 +64,46 @@ handleSocketEvent = (eventData) => {
             }
         }
 
-        //TODO: send amount to second project socket.
+        providerSocket.emit("event", { token: id, amount: amount });
     }
 };
 
+const isIdInUse = (id) => {
+    for (const [key, value] of streamLabsSockets.entries()) {
+        if (streamLabsSockets.get(key) == id) return true;
+    }
+
+    return false;
+};
+
 module.exports.setUpSocket = (id) => {
+    if (isIdInUse(id)) {
+        //Don't set up duplicate sockets.
+        return;
+    }
+
     const socket = socketIoClient.connect(
         `https://sockets.streamlabs.com?token=${id}`
     );
 
-    if (streamLabsSockets[id] != null) {
-        return;
-    }
+    const providerSocket = socketIoClient.connect(
+        `${providerUrl}?provider=${providerToken}`
+    );
 
     socket.on("connect", () => {
         console.log("connected");
     });
     socket.on("event", (eventData) => {
-        handleSocketEvent(eventData);
+        handleSocketEvent(eventData, id);
     });
-
     socket.on("disconnect", () => console.log("disconnected"));
 
-    streamLabsSockets[id] = socket;
+    providerSocket.on("connect", () => {
+        console.log("connected to provider!");
+    });
+    providerSocket.on("disconnect", () => {
+        console.log("disconnected from provider!");
+    });
+
+    streamLabsSockets.set(socket, id);
 };

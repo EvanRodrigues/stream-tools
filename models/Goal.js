@@ -21,6 +21,11 @@ const GoalSchema = new Schema({
         required: true,
         default: "My Goal",
     },
+    accessToken: {
+        type: String,
+        required: true,
+        default: "",
+    },
     socketToken: {
         type: String,
         required: true,

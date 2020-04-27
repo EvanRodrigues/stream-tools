@@ -31,6 +31,7 @@ router.post("/", (req, res) => {
         progress: req.body.progress,
         goal: req.body.goal,
         name: req.body.name,
+        accessToken: req.body.accessToken,
         socketToken: req.body.socketToken,
     });
 
@@ -85,6 +86,16 @@ router.post("/update/:channel", (req, res) => {
 router.get("/channel/:channel", (req, res) => {
     Goal.findOne({ channel: req.params.channel }).then((goal) =>
         res.json(goal)
+    );
+});
+
+//@route    GET api/goal/accessToken/:token
+//@desc     Get the accessToken from the :token
+//@access   Public
+//TODO      Make this require authentication
+router.get("/accessToken/:token", (req, res) => {
+    Goal.findOne({ socketToken: req.params.token }).then((goal) =>
+        res.json({ accessToken: goal.accessToken })
     );
 });
 
