@@ -15,7 +15,7 @@ const calcSubs = (subPlan) => {
 };
 
 //Event handler for the StreamLabs socket api.
-const handleSocketEvent = (eventData, id) => {
+const handleSocketEvent = (providerSocket, eventData, id) => {
     let amount;
     let isRepeat;
 
@@ -94,7 +94,7 @@ module.exports.setUpSocket = (id) => {
         console.log("connected");
     });
     socket.on("event", (eventData) => {
-        handleSocketEvent(eventData, id);
+        handleSocketEvent(providerSocket, eventData, id);
     });
     socket.on("disconnect", () => console.log("disconnected"));
 
