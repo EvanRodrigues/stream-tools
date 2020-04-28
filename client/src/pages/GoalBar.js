@@ -38,25 +38,24 @@ class GoalBar extends Component {
 
     //Fetch call to update the goal's progress.
     updateProgress = (progress) => {
-        fetch(`${url}/api/goal/updateProgress/${this.state.channel}`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ progress: progress }),
-        });
+        const totalProgress = this.state.progress + progress;
+
+        this.setState({ ...this.state, progress: totalProgress });
     };
 
     componentDidMount() {
         //TODO: Dynamic routes for tokens.
-        const token = Math.floor(Math.random() * 2);
+
         socket = io(`${socketUrl}?token=123`);
 
         //TODO: Update front end from eventData.
         socket.on("event", (eventData) => {
             console.log(eventData);
+            const amount = eventData["amount"];
+            this.updateProgress(amount);
         });
 
+        //Needs to be based on props in future.
         fetch(`${url}/api/goal`)
             .then((response) => response.json())
             .then((json) => {

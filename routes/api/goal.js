@@ -93,9 +93,13 @@ router.get("/channel/:channel", (req, res) => {
 //@desc     Get the accessToken from the :token
 //@access   Public
 //TODO      Make this require authentication
-router.get("/accessToken/:token", (req, res) => {
+router.get("/channelInfo/:token", (req, res) => {
     Goal.findOne({ socketToken: req.params.token }).then((goal) =>
-        res.json({ accessToken: goal.accessToken })
+        res.json({
+            channel: goal.channel,
+            progress: goal.progress,
+            accessToken: goal.accessToken,
+        })
     );
 });
 
