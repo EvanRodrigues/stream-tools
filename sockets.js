@@ -16,6 +16,7 @@ const calcSubs = (subPlan) => {
 
 //Event handler for the StreamLabs socket api.
 const handleSocketEvent = (providerSocket, eventData, id) => {
+    console.log(eventData);
     let amount;
     let isRepeat;
 
@@ -31,7 +32,9 @@ const handleSocketEvent = (providerSocket, eventData, id) => {
     //TODO: Check eventData.message being null.
     try {
         isRepeat = !("repeat" in eventData.message[0]);
-    } catch (Err) {}
+    } catch (Err) {
+        return;
+    }
 
     //If event is not a repeat.
     if (!!("repeat" in eventData.message[0])) {
