@@ -37,7 +37,7 @@ const handleSocketEvent = (providerSocket, eventData, id) => {
     }
 
     //If event is not a repeat.
-    if (!!("repeat" in eventData.message[0])) {
+    if (!("repeat" in eventData.message[0])) {
         if (eventData.type === "donation")
             //code to handle donation events.
             amount = Number(eventData.message[0].amount);
