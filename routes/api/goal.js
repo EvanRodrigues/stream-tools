@@ -22,6 +22,22 @@ router.get("/", (req, res) => {
     Goal.find().then((goals) => res.json(goals));
 });
 
+//@route    GET api/goal/match/:token
+//@desc     Get the goal that matches the access token
+//@access   Public
+router.get("/match/:token", (req, res) => {
+    Goal.findOne({ accessToken: req.params.token })
+        .then((goal) => {
+            res.json({
+                channel: goal.channel,
+                progress: goal.progress,
+                goal: goal.goal,
+                name: goal.name,
+            });
+        })
+        .catch((err) => res.status(404).json({ success: false })); //token not found;
+});
+
 //@route    POST api/goal
 //@desc     Creates a new goal
 //@access   Public

@@ -16,8 +16,8 @@ const socketUrl =
 let socket;
 
 class GoalBar extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             channel: "",
             progress: 0,
@@ -43,10 +43,14 @@ class GoalBar extends Component {
         this.setState({ ...this.state, progress: totalProgress });
     };
 
+    fetchGoal = () => {};
+
     componentDidMount() {
+        const token = this.props.match.params.token;
+
         //TODO: Dynamic routes for tokens.
 
-        socket = io(`${socketUrl}?token=123`);
+        socket = io(`${socketUrl}?token=${token}`);
 
         //TODO: Update front end from eventData.
         socket.on("event", (eventData) => {
@@ -56,16 +60,18 @@ class GoalBar extends Component {
         });
 
         //Needs to be based on props in future.
-        fetch(`${url}/api/goal`)
+        fetch(`${url}/api/goal/match/${token}`)
             .then((response) => response.json())
             .then((json) => {
-                //Set up component level state.
-                this.setState({ ...this.state, channel: json[0]["channel"] });
-                this.setState({ ...this.state, progress: json[0]["progress"] });
-                this.setState({ ...this.state, goal: json[0]["goal"] });
-                this.setState({ ...this.state, goalName: json[0]["name"] });
+                if (json["success"] != null) return;
 
-                fetch(`${url}/api/goal/openSocket/${json[0]["channel"]}`);
+                //Set up component level state.
+                this.setState({ ...this.state, channel: json["channel"] });
+                this.setState({ ...this.state, progress: json["progress"] });
+                this.setState({ ...this.state, goal: json["goal"] });
+                this.setState({ ...this.state, goalName: json["name"] });
+
+                fetch(`${url}/api/goal/openSocket/${json["channel"]}`);
             });
     }
 
