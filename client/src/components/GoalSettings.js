@@ -1,6 +1,31 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 export const GoalSettings = (props) => {
+    const [inputProgress, setInputProgress] = useState(0.0);
+    const [inputName, setInputName] = useState("");
+    const [inputGoal, setInputGoal] = useState("");
+
+    const updateProgress = (event) => {
+        setInputProgress(event.target.value);
+        props.setProgress(parseFloat(event.target.value));
+    };
+
+    const updateGoal = (event) => {
+        setInputGoal(event.target.value);
+        props.setGoal(parseFloat(event.target.value));
+    };
+
+    const updateName = (event) => {
+        setInputName(event.target.value);
+        props.setName(event.target.value);
+    };
+
+    useEffect(() => {
+        setInputProgress(props.progress);
+        setInputGoal(props.goal);
+        setInputName(props.name);
+    }, []);
+
     return (
         <div id="formContainer" className="formContainer">
             <h1>Goal Settings</h1>
@@ -11,7 +36,8 @@ export const GoalSettings = (props) => {
                     id="progress"
                     className="barInput"
                     type="text"
-                    value={props.progress}
+                    value={inputProgress}
+                    onChange={updateProgress}
                 />
 
                 <label>Goal Target</label>
@@ -19,7 +45,8 @@ export const GoalSettings = (props) => {
                     id="goal_target"
                     className="barInput"
                     type="text"
-                    value={props.goal}
+                    value={inputGoal}
+                    onChange={updateGoal}
                 />
 
                 <label>Goal Name</label>
@@ -27,7 +54,8 @@ export const GoalSettings = (props) => {
                     id="goal_name"
                     className="barInput"
                     type="text"
-                    value={props.name}
+                    value={inputName}
+                    onChange={updateName}
                 />
 
                 <label>Text Color</label>

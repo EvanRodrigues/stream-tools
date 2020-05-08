@@ -9,14 +9,24 @@ const url =
         ? "http://localhost:5000" //dev
         : window.location.origin; //live
 
+const formatToTwoDecimals = (number) => {
+    return number.toFixed(2);
+};
+
 const formatToDollars = (number) => {
+    //Default to $0.00 if input field is empty string
+    if (isNaN(number.toFixed(2))) {
+        const zero = 0.0;
+        return `$${zero.toFixed(2)}`;
+    }
+
     return `$${number.toFixed(2)}`;
 };
 
 export const Dashboard = (props) => {
     const [progress, setProgress] = useState(0.0);
     const [goal, setGoal] = useState(0.0);
-    const [name, setName] = useState("");
+    const [name, setName] = useState(null);
     const [textColor, setTextColor] = useState("");
     const [backgroundColor, setBackgroundColor] = useState("");
     const [layerOneColor, setLayerOneColor] = useState("");
@@ -37,13 +47,17 @@ export const Dashboard = (props) => {
             });
     }, []);
 
+    if (name === null) return <></>;
     return (
         <div id="content">
             <Nav />
             <div id="settings">
                 <GoalSettings
-                    progress={formatToDollars(progress)}
-                    goal={formatToDollars(goal)}
+                    progress={formatToTwoDecimals(progress)}
+                    goal={formatToTwoDecimals(goal)}
+                    setProgress={setProgress}
+                    setGoal={setGoal}
+                    setName={setName}
                     name={name}
                 />
                 <DisplayBar
