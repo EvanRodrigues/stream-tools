@@ -27,10 +27,13 @@ export const GoalSettings = (props) => {
     }, []);
 
     return (
-        <div id="formContainer" className="formContainer">
+        <div
+            id="goalSettingsContainer"
+            className="formContainer dashboardContainer"
+        >
             <h1>Goal Settings</h1>
 
-            <form id="goalSettings">
+            <form id="goalSettingsForm">
                 <label>Progress</label>
                 <input
                     id="progress"
@@ -57,21 +60,6 @@ export const GoalSettings = (props) => {
                     value={inputName}
                     onChange={updateName}
                 />
-
-                <label>Text Color</label>
-                <input id="text_color" className="inputColor" type="color" />
-
-                <label>Background Color</label>
-                <input id="empty_color" className="inputColor" type="color" />
-
-                <label>Layer One Color</label>
-                <input id="one_color" className="inputColor" type="color" />
-
-                <label>Layer Two Color</label>
-                <input id="two_color" className="inputColor" type="color" />
-
-                <label>Layer Three Color</label>
-                <input id="three_color" className="inputColor" type="color" />
             </form>
 
             <div className="sectionFooter">

@@ -1,0 +1,74 @@
+#exampleBar {
+    grid-column: 3/6;
+    grid-row: 1;
+    min-height: 250px;
+    padding: 10px;
+    background-color: $background-color;
+}
+
+#barContainer {
+    height: 70%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+#progressBar {
+    position: relative;
+    width: 100%;
+    height: 50px;
+    background-color: #e6e6e6;
+    display: flex;
+    align-items: center;
+}
+
+#barInfo,
+#barTitle {
+    line-height: 50px;
+    font-size: 30px;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+}
+
+#barTitle,
+#barInfo,
+#one,
+#two,
+#three {
+    height: 100%;
+    position: absolute;
+}
+
+#one {
+    width: 75%;
+    background-color: #00ff00;
+}
+
+#two {
+    width: 50%;
+    background-color: #ff3333;
+}
+
+#three {
+    width: 25%;
+    background-color: #cc00ff;
+}
+
+#barTitle {
+    text-align: center;
+    width: 40%;
+}
+
+#barInfo {
+    width: 95%;
+}
+
+#current {
+    float: left;
+}
+
+#goal {
+    float: right;
+}

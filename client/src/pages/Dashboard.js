@@ -3,6 +3,7 @@ import "../stylesheets/css/dashboard.css";
 import { Nav } from "../components/Nav";
 import { DisplayBar } from "../components/DisplayBar";
 import { GoalSettings } from "../components/GoalSettings";
+import { ColorSettings } from "../components/ColorSettings";
 
 const url =
     window.location.origin === "http://localhost:3000"
@@ -39,8 +40,6 @@ export const Dashboard = (props) => {
         fetch(`${url}/api/goal/match/${token}`)
             .then((response) => response.json())
             .then((json) => {
-                console.log(json);
-
                 setProgress(json["progress"]);
                 setGoal(json["goal"]);
                 setName(json["name"]);
@@ -60,11 +59,14 @@ export const Dashboard = (props) => {
                     setName={setName}
                     name={name}
                 />
+
                 <DisplayBar
                     progress={formatToDollars(progress)}
                     goal={formatToDollars(goal)}
                     name={name}
                 />
+
+                <ColorSettings />
             </div>
         </div>
     );
