@@ -48,11 +48,8 @@ class GoalBar extends Component {
     componentDidMount() {
         const token = this.props.match.params.token;
 
-        //TODO: Dynamic routes for tokens.
-
         socket = io(`${socketUrl}?token=${token}`);
 
-        //TODO: Update front end from eventData.
         socket.on("event", (eventData) => {
             console.log(eventData);
             const amount = eventData["amount"];
