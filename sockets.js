@@ -16,9 +16,8 @@ const calcSubs = (subPlan) => {
 
 //Event handler for the StreamLabs socket api.
 const handleSocketEvent = (providerSocket, eventData, id) => {
-    console.log(eventData);
     let amount;
-    let isRepeat;
+    let isRepeat, isTest;
 
     //Ignore stream labels general info messages.
     if (
@@ -29,15 +28,26 @@ const handleSocketEvent = (providerSocket, eventData, id) => {
         return;
     }
 
-    //TODO: Check eventData.message being null.
+    //Checks eventData.message being null.
+    //Example: streamlabels events
     try {
         isRepeat = !("repeat" in eventData.message[0]);
+        isTest = eventData.message[0].isTest;
     } catch (Err) {
         return;
     }
 
+    //isTest will be true if you try a test alert on streamlabs.
+    //isRepeat won't be null if a streamlabels repeat of an alert happens.
+    //Either way, ignore the event.
+    if (isTest == true || isRepeat != null) {
+        if (isTest == true) console.log("test alert used");
+        if (isRepeat != null) console.log("repeat alert used");
+        return;
+    }
+
     //If event is not a repeat.
-    if (!("repeat" in eventData.message[0])) {
+    if (isRepeat == null) {
         if (eventData.type === "donation")
             //code to handle donation events.
             amount = Number(eventData.message[0].amount);
@@ -66,6 +76,9 @@ const handleSocketEvent = (providerSocket, eventData, id) => {
                     break;
             }
         }
+
+        //Handles follows, hosts, etc.
+        if (amount == null) return;
 
         providerSocket.emit("event", { token: id, amount: amount });
     }
