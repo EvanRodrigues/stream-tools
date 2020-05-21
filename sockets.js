@@ -16,7 +16,6 @@ const calcSubs = (subPlan) => {
 
 //Event handler for the StreamLabs socket api.
 const handleSocketEvent = (providerSocket, eventData, id) => {
-    console.log(eventData);
     let amount;
     let isRepeat, isTest;
 

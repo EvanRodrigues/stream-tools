@@ -12,10 +12,12 @@ export class ColorInput extends Component {
         };
     }
 
-    updateState = () => {};
+    updateState = (event) => {
+        this.setState({ ...this.state, color: event.currentTarget.value });
+    };
 
-    toggle = () => {
-        this.setState({ ...this.state, isOpen: !this.state.isOpen });
+    open = () => {
+        this.setState({ ...this.state, isOpen: true });
     };
 
     handleClickOutside = (event) => {
@@ -36,12 +38,13 @@ export class ColorInput extends Component {
         return (
             <div className="colorInputContainer">
                 <label>{labelText}</label>
-                <div className="display">
+                <div className="colorPickerContainer">
                     <input
                         type="text"
+                        className="formInput hexColorInput"
                         value={color}
-                        onFocus={this.toggle}
                         onChange={this.updateState}
+                        onFocus={this.open}
                     />
                     <div
                         className="displayColor"
@@ -54,6 +57,7 @@ export class ColorInput extends Component {
                     color={color}
                     onChange={this.handleChange}
                     onChangeComplete={this.handleChangeComplete}
+                    disableAlpha={true}
                 />
             </div>
         );
