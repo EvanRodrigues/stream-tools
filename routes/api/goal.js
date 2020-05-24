@@ -49,6 +49,7 @@ router.post("/", (req, res) => {
         name: req.body.name,
         accessToken: req.body.accessToken,
         socketToken: req.body.socketToken,
+        colors: {},
     });
 
     newGoal.save().then((item) => res.json(item));
