@@ -33,6 +33,7 @@ router.get("/match/:token", (req, res) => {
                 progress: goal.progress,
                 goal: goal.goal,
                 name: goal.name,
+                colors: goal.colors,
             });
         })
         .catch((err) => res.status(404).json({ success: false })); //token not found;

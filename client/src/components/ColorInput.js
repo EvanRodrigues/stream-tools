@@ -6,14 +6,12 @@ export class ColorInput extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            color: "#fff",
-            backgroundColor: "#fff",
             isOpen: false,
         };
     }
 
-    updateState = (event) => {
-        this.setState({ ...this.state, color: event.currentTarget.value });
+    updateColor = (event, setColor) => {
+        setColor(event.currentTarget.value);
     };
 
     open = () => {
@@ -24,15 +22,16 @@ export class ColorInput extends Component {
         this.setState({ ...this.state, isOpen: false });
     };
 
-    handleChange = (color, event) => {
-        this.setState({ ...this.state, color: color["hex"] });
+    handleChange = (color, event, setColor) => {
+        setColor(color["hex"]);
     };
 
     handleChangeComplete = () => {};
 
     render() {
         const labelText = this.props.label;
-        let color = this.state.color;
+        let color = this.props.color;
+        let setColor = this.props.setColor;
         let isOpen = this.state.isOpen;
 
         return (
@@ -43,7 +42,7 @@ export class ColorInput extends Component {
                         type="text"
                         className="formInput hexColorInput"
                         value={color}
-                        onChange={this.updateState}
+                        onChange={(event) => this.updateColor(event, setColor)}
                         onFocus={this.open}
                     />
                     <div
@@ -55,7 +54,9 @@ export class ColorInput extends Component {
                 <SketchPicker
                     className={isOpen ? "colorInput -active" : "colorInput"}
                     color={color}
-                    onChange={this.handleChange}
+                    onChange={(color, event) =>
+                        this.handleChange(color, event, setColor)
+                    }
                     onChangeComplete={this.handleChangeComplete}
                     disableAlpha={true}
                 />

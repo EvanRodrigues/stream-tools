@@ -8,16 +8,28 @@ export const DisplayBar = (props) => {
             </div>
 
             <div id="barContainer">
-                <div id="progressBar">
-                    <div id="one"></div>
-                    <div id="two"></div>
-                    <div id="three"></div>
+                <div
+                    id="progressBar"
+                    style={{ backgroundColor: props.backgroundColor }}
+                >
+                    <div
+                        id="one"
+                        style={{ backgroundColor: props.layerOneColor }}
+                    ></div>
+                    <div
+                        id="two"
+                        style={{ backgroundColor: props.layerTwoColor }}
+                    ></div>
+                    <div
+                        id="three"
+                        style={{ backgroundColor: props.layerThreeColor }}
+                    ></div>
 
-                    <div id="barTitle">
+                    <div id="barTitle" style={{ color: props.textColor }}>
                         <span id="goalName">{props.name}</span>
                     </div>
 
-                    <div id="barInfo">
+                    <div id="barInfo" style={{ color: props.textColor }}>
                         <span id="current">{props.progress}</span>
                         <span id="goal">{props.goal}</span>
                     </div>
