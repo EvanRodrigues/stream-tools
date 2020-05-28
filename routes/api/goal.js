@@ -33,6 +33,7 @@ router.get("/match/:token", (req, res) => {
                 progress: goal.progress,
                 goal: goal.goal,
                 name: goal.name,
+                colors: goal.colors,
             });
         })
         .catch((err) => res.status(404).json({ success: false })); //token not found;
@@ -49,6 +50,7 @@ router.post("/", (req, res) => {
         name: req.body.name,
         accessToken: req.body.accessToken,
         socketToken: req.body.socketToken,
+        colors: {},
     });
 
     newGoal.save().then((item) => res.json(item));

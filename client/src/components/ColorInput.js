@@ -6,42 +6,44 @@ export class ColorInput extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            color: "#fff",
-            backgroundColor: "#fff",
             isOpen: false,
         };
     }
 
-    updateState = () => {};
+    updateColor = (event, setColor) => {
+        setColor(event.currentTarget.value);
+    };
 
-    toggle = () => {
-        this.setState({ ...this.state, isOpen: !this.state.isOpen });
+    open = () => {
+        this.setState({ ...this.state, isOpen: true });
     };
 
     handleClickOutside = (event) => {
         this.setState({ ...this.state, isOpen: false });
     };
 
-    handleChange = (color, event) => {
-        this.setState({ ...this.state, color: color["hex"] });
+    handleChange = (color, event, setColor) => {
+        setColor(color["hex"]);
     };
 
     handleChangeComplete = () => {};
 
     render() {
         const labelText = this.props.label;
-        let color = this.state.color;
+        let color = this.props.color;
+        let setColor = this.props.setColor;
         let isOpen = this.state.isOpen;
 
         return (
             <div className="colorInputContainer">
                 <label>{labelText}</label>
-                <div className="display">
+                <div className="colorPickerContainer">
                     <input
                         type="text"
+                        className="formInput hexColorInput"
                         value={color}
-                        onFocus={this.toggle}
-                        onChange={this.updateState}
+                        onChange={(event) => this.updateColor(event, setColor)}
+                        onFocus={this.open}
                     />
                     <div
                         className="displayColor"
@@ -52,8 +54,11 @@ export class ColorInput extends Component {
                 <SketchPicker
                     className={isOpen ? "colorInput -active" : "colorInput"}
                     color={color}
-                    onChange={this.handleChange}
+                    onChange={(color, event) =>
+                        this.handleChange(color, event, setColor)
+                    }
                     onChangeComplete={this.handleChangeComplete}
+                    disableAlpha={true}
                 />
             </div>
         );

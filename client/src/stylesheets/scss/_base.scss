@@ -28,10 +28,9 @@ body {
 }
 
 #content {
-    padding-left: 25px;
-    padding-right: 25px;
+    padding: 25px;
     width: 85%;
-    height: 100vh;
+    min-height: 100vh;
     margin: auto;
     background-color: $section-color;
 }
@@ -44,6 +43,13 @@ h1 {
     color: $text-color;
     font-weight: normal;
     text-align: center;
+}
+
+.formInput {
+    height: 20px;
+    background-color: $section-color;
+    color: white;
+    border: none;
 }
 
 .barSubmit,

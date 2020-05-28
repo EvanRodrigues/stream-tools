@@ -43,6 +43,13 @@ export const Dashboard = (props) => {
                 setProgress(json["progress"]);
                 setGoal(json["goal"]);
                 setName(json["name"]);
+
+                const colors = json["colors"];
+                setTextColor(colors["textColor"]);
+                setBackgroundColor(colors["backgroundColor"]);
+                setLayerOneColor(colors["layerOneColor"]);
+                setLayerTwoColor(colors["layerTwoColor"]);
+                setLayerThreeColor(colors["layerThreeColor"]);
             });
     }, []);
 
@@ -64,9 +71,25 @@ export const Dashboard = (props) => {
                     progress={formatToDollars(progress)}
                     goal={formatToDollars(goal)}
                     name={name}
+                    textColor={textColor}
+                    backgroundColor={backgroundColor}
+                    layerOneColor={layerOneColor}
+                    layerTwoColor={layerTwoColor}
+                    layerThreeColor={layerThreeColor}
                 />
 
-                <ColorSettings />
+                <ColorSettings
+                    textColor={textColor}
+                    backgroundColor={backgroundColor}
+                    layerOneColor={layerOneColor}
+                    layerTwoColor={layerTwoColor}
+                    layerThreeColor={layerThreeColor}
+                    setTextColor={setTextColor}
+                    setBackgroundColor={setBackgroundColor}
+                    setLayerOneColor={setLayerOneColor}
+                    setLayerTwoColor={setLayerTwoColor}
+                    setLayerThreeColor={setLayerThreeColor}
+                />
             </div>
         </div>
     );
