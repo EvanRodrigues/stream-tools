@@ -32,11 +32,9 @@
     height: 20px;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 10px;
 }
 
 .colorInputContainer {
-    padding: 5px;
     color: white;
 }
 
@@ -47,10 +45,10 @@
 
 .colorInput {
     display: none;
+    margin-top: 10px;
     padding-bottom: 6.5px !important;
     width: calc(100% - 20px) !important;
     box-sizing: border-box;
-    margin: auto;
     background: $section-color !important;
 
     .flexbox-fix:nth-child(3),

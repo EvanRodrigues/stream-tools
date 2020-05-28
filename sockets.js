@@ -42,7 +42,7 @@ const handleSocketEvent = (providerSocket, eventData, id) => {
     //Either way, ignore the event.
     if (isTest == true || isRepeat == true) {
         if (isTest == true) console.log("test alert used");
-        if (isRepeat != null) console.log("repeat alert used");
+        if (isRepeat == true) console.log("repeat alert used");
         return;
     }
 

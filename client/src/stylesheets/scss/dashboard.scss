@@ -3,14 +3,50 @@
 @import "goalSettings";
 @import "displayBar";
 
+#settings {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-auto-rows: minmax(100px, auto);
+    column-gap: 25px;
+    row-gap: 25px;
+
+    label {
+        color: $text-color;
+        font-weight: normal;
+    }
+}
+
 .dashboardContainer {
-    min-height: 250px;
+    min-height: 300px;
     padding: 10px;
     background-color: $background-color;
+}
+
+#settingsForm {
+    min-height: calc(100vh - 125px);
+}
+
+.goalInput,
+.colorInputContainer {
+    margin-top: 10px;
 }
 
 .formContainer {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+}
+
+.formLabel {
+    padding-bottom: 5px;
+}
+
+.dashboardFooter {
+    display: flex;
+    justify-content: center;
+
+    .submitButton {
+        margin-left: 10px;
+        margin-right: 10px;
+    }
 }

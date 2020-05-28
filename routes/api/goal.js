@@ -65,6 +65,15 @@ router.delete("/:id", (req, res) => {
         .catch((err) => res.status(404).json({ success: false })); //id not found
 });
 
+router.post("/reset/:channel", (req, res) => {
+    Goal.findOne({ channel: req.params.channel }).then((goal) => {
+        if (goal.accessToken == req.body.token) {
+            goal.progress = 0.0;
+            goal.save().then((goal) => res.json(goal));
+        }
+    });
+});
+
 //@route    POST api/goal
 //@desc     Updates the progress of the goal
 //@access   Public
@@ -93,6 +102,7 @@ router.post("/update/:channel", (req, res) => {
         goal.progress = req.body.progress;
         goal.goal = req.body.goal;
         goal.name = req.body.name;
+        goal.colors = req.body.colors;
         goal.save().then((goal) => res.json(goal));
     });
 });
