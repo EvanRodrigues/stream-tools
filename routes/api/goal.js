@@ -93,6 +93,7 @@ router.post("/update/:channel", (req, res) => {
         goal.progress = req.body.progress;
         goal.goal = req.body.goal;
         goal.name = req.body.name;
+        goal.colors = req.body.colors;
         goal.save().then((goal) => res.json(goal));
     });
 });

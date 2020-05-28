@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { GoalInput } from "./GoalInput";
 
 export const GoalSettings = (props) => {
     const [inputProgress, setInputProgress] = useState(0.0);
@@ -33,40 +34,26 @@ export const GoalSettings = (props) => {
         >
             <h1>Goal Settings</h1>
 
-            <form id="goalSettingsForm">
-                <label>Progress</label>
-                <input
-                    id="progress"
-                    className="barInput"
-                    type="text"
-                    value={inputProgress}
-                    onChange={updateProgress}
-                />
-
-                <label>Goal Target</label>
-                <input
-                    id="goal_target"
-                    className="barInput"
-                    type="text"
-                    value={inputGoal}
-                    onChange={updateGoal}
-                />
-
-                <label>Goal Name</label>
-                <input
-                    id="goal_name"
-                    className="barInput"
-                    type="text"
-                    value={inputName}
-                    onChange={updateName}
-                />
-            </form>
-
-            <div className="sectionFooter">
-                <button className="submitButton" id="submitGoalSettings">
-                    Submit
-                </button>
-            </div>
+            <GoalInput
+                label="Progress"
+                value={inputProgress}
+                update={updateProgress}
+                name="progress"
+            />
+            <GoalInput
+                label="Goal Target"
+                value={inputGoal}
+                update={updateGoal}
+                name="goal"
+            />
+            <GoalInput
+                label="Goal Name"
+                value={inputName}
+                update={updateName}
+                name="name"
+            />
+            <GoalInput label="Font (not used)" value="" name="font" />
+            <GoalInput label="Font Size (not used)" value="" name="fontSize" />
         </div>
     );
 };

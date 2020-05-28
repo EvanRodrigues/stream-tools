@@ -30,7 +30,7 @@ body {
 #content {
     padding: 25px;
     width: 85%;
-    min-height: 100vh;
+    min-height: calc(100vh - 50px);
     margin: auto;
     background-color: $section-color;
 }
@@ -45,6 +45,12 @@ h1 {
     text-align: center;
 }
 
+hr {
+    border-color: $dark-text-color;
+    margin-top: 25px;
+    margin-bottom: 25px;
+}
+
 .formInput {
     height: 20px;
     background-color: $section-color;
@@ -52,7 +58,6 @@ h1 {
     border: none;
 }
 
-.barSubmit,
 .submitButton {
     font-family: "Roboto", sans-serif;
     background-color: $blue;
@@ -63,13 +68,8 @@ h1 {
     color: $dark-text-color;
 }
 
-.barSubmit:hover,
 .submitButton:hover {
     cursor: pointer;
-}
-
-#sectionFooter {
-    height: 10%;
 }
 
 .-active {

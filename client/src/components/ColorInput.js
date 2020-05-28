@@ -41,6 +41,7 @@ export class ColorInput extends Component {
                     <input
                         type="text"
                         className="formInput hexColorInput"
+                        name={this.props.name}
                         value={color}
                         onChange={(event) => this.updateColor(event, setColor)}
                         onFocus={this.open}
