@@ -1,6 +1,22 @@
 import React from "react";
 
 export const DisplayBar = (props) => {
+    const resetBar = () => {
+        const url = `${props.url}/api/goal/reset/${props.channel}`;
+
+        fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ token: props.token }),
+        })
+            .then((response) => response.json())
+            .then((json) => {
+                window.location.reload();
+            });
+    };
+
     return (
         <div id="exampleBar" className="formContainer">
             <div className="headerContainer">
@@ -37,7 +53,9 @@ export const DisplayBar = (props) => {
             </div>
 
             <div className="sectionFooter">
-                <button className="submitButton">Reset Bar</button>
+                <button className="submitButton" onFocus={resetBar}>
+                    Reset Bar
+                </button>
             </div>
         </div>
     );

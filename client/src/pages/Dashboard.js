@@ -126,6 +126,9 @@ export const Dashboard = (props) => {
                     />
 
                     <DisplayBar
+                        url={url}
+                        channel={channel}
+                        token={token}
                         progress={formatToDollars(progress)}
                         goal={formatToDollars(goal)}
                         name={name}
