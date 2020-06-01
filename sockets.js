@@ -118,7 +118,7 @@ module.exports.setUpSocket = (id) => {
     providerSocket.on("connect", () => {
         console.log("connected to provider!");
     });
-    providerSocket.on("ping", (eventData) => {
+    providerSocket.on("test_connection", (eventData) => {
         console.log(eventData);
         //GET REQUEST TO SERVER
         if (process.env.NODE_ENV === "production") {
