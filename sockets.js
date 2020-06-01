@@ -118,13 +118,13 @@ module.exports.setUpSocket = (id) => {
     providerSocket.on("connect", () => {
         console.log("connected to provider!");
     });
-    providerSocket.on("ping", () => {
+    providerSocket.on("ping", (eventData) => {
+        console.log(eventData);
         //GET REQUEST TO SERVER
         if (process.env.NODE_ENV === "production") {
+            console.log("PINGING SERVER!");
             https.get(`https://stream-goal.herokuapp.com/api/goal/PING`);
         }
-
-        providerSocket.emit("pong");
     });
     providerSocket.on("disconnect", () => {
         console.log("disconnected from provider!");
