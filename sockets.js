@@ -117,6 +117,9 @@ module.exports.setUpSocket = (id) => {
     providerSocket.on("connect", () => {
         console.log("connected to provider!");
     });
+    providerSocket.on("ping", () => {
+        providerSocket.emit("pong");
+    });
     providerSocket.on("disconnect", () => {
         console.log("disconnected from provider!");
     });
