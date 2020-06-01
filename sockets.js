@@ -1,3 +1,4 @@
+const https = require("https");
 const socketIoClient = require("socket.io-client");
 const providerToken =
     process.env.PROVIDER_TOKEN || require("./config/keys").PROVIDER_TOKEN;
@@ -118,6 +119,11 @@ module.exports.setUpSocket = (id) => {
         console.log("connected to provider!");
     });
     providerSocket.on("ping", () => {
+        //GET REQUEST TO SERVER
+        if (process.env.NODE_ENV === "production") {
+            https.get(`https://stream-goal.herokuapp.com/api/goal/PING`);
+        }
+
         providerSocket.emit("pong");
     });
     providerSocket.on("disconnect", () => {

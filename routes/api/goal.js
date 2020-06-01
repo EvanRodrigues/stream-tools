@@ -22,6 +22,13 @@ router.get("/", (req, res) => {
     Goal.find().then((goals) => res.json(goals));
 });
 
+//@route    GET api/goal/PING
+//@desc     Pings the server to keep server up.
+//@access   Public
+router.get("/PING", (req, res) => {
+    res.json({});
+});
+
 //@route    GET api/goal/match/:token
 //@desc     Get the goal that matches the access token
 //@access   Public
