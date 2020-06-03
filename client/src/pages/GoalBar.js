@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Transition } from "react-transition-group";
 import io from "socket.io-client";
-import "../stylesheets/css/bar.css";
+import "../stylesheets/css/goalBar.css";
 
 const url =
     window.location.origin === "http://localhost:3000"
@@ -23,6 +23,7 @@ class GoalBar extends Component {
             progress: 0,
             goal: 0,
             goalName: "",
+            colors: {},
             animatedBar: false,
             //Formats the goal and progress to two decimal places to show cents.
             formatToDollars: function (number) {
@@ -67,6 +68,7 @@ class GoalBar extends Component {
                 this.setState({ ...this.state, progress: json["progress"] });
                 this.setState({ ...this.state, goal: json["goal"] });
                 this.setState({ ...this.state, goalName: json["name"] });
+                this.setState({ ...this.state, colors: json["colors"] });
 
                 fetch(`${url}/api/goal/openSocket/${json["channel"]}`);
             });
@@ -77,6 +79,7 @@ class GoalBar extends Component {
         const goal = this.state.goal;
         const goalName = this.state.goalName;
         const formatToDollars = this.state.formatToDollars;
+        const colors = this.state.colors;
 
         if (this.state.animatedBar === false) {
             setTimeout(() => {
@@ -86,14 +89,17 @@ class GoalBar extends Component {
 
         const duration = 1000;
         const firstLayerDefault = {
+            "background-color": colors["layerOneColor"],
             transition: `width ${duration}ms`,
             width: "0%",
         };
         const secondLayerDefault = {
+            "background-color": colors["layerTwoColor"],
             transition: `width ${duration}ms`,
             width: "0%",
         };
         const thirdLayerDefault = {
+            "background-color": colors["layerThreeColor"],
             transition: `width ${duration}ms`,
             width: "0%",
         };
@@ -131,7 +137,10 @@ class GoalBar extends Component {
             return <></>;
         }
         return (
-            <div id="progressBar">
+            <div
+                id="progressBar"
+                style={{ "background-color": colors["backgroundColor"] }}
+            >
                 <Transition in={this.state.animatedBar} timeout={0}>
                     {(state) => (
                         <div
@@ -169,12 +178,18 @@ class GoalBar extends Component {
                 </Transition>
 
                 <div id="barTitle">
-                    <span id="goalName">{goalName}</span>
+                    <span id="goalName" style={{ color: colors["textColor"] }}>
+                        {goalName}
+                    </span>
                 </div>
 
                 <div id="barInfo">
-                    <span id="current">{formatToDollars(progress)}</span>
-                    <span id="goal">{formatToDollars(goal)}</span>
+                    <span id="current" style={{ color: colors["textColor"] }}>
+                        {formatToDollars(progress)}
+                    </span>
+                    <span id="goal" style={{ color: colors["textColor"] }}>
+                        {formatToDollars(goal)}
+                    </span>
                 </div>
             </div>
         );
