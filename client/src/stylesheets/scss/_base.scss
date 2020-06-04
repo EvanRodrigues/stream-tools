@@ -51,6 +51,11 @@ hr {
     margin-bottom: 25px;
 }
 
+.errorMessage {
+    margin-top: 10px;
+    color: $red;
+}
+
 .formInput {
     height: 20px;
     background-color: $section-color;
