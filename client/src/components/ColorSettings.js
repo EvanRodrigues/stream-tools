@@ -12,31 +12,40 @@ export const ColorSettings = (props) => {
                 name="textColor"
                 color={props.textColor}
                 setColor={props.setTextColor}
+                setError={props.setError}
             />
             <ColorInput
                 label="Background Color"
                 name="backgroundColor"
                 color={props.backgroundColor}
                 setColor={props.setBackgroundColor}
+                setError={props.setError}
             />
             <ColorInput
                 label="Layer One Color"
                 name="layerOneColor"
                 color={props.layerOneColor}
                 setColor={props.setLayerOneColor}
+                setError={props.setError}
             />
             <ColorInput
                 label="Layer Two Color"
                 name="layerTwoColor"
                 color={props.layerTwoColor}
                 setColor={props.setLayerTwoColor}
+                setError={props.setError}
             />
             <ColorInput
                 label="Layer Three Color"
                 name="layerThreeColor"
                 color={props.layerThreeColor}
                 setColor={props.setLayerThreeColor}
+                setError={props.setError}
             />
+
+            <span id="colorError" className="errorMessage">
+                {props.error}
+            </span>
         </div>
     );
 };

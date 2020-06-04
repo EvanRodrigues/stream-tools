@@ -34,9 +34,17 @@ export const Dashboard = (props) => {
     const [layerOneColor, setLayerOneColor] = useState("");
     const [layerTwoColor, setLayerTwoColor] = useState("");
     const [layerThreeColor, setLayerThreeColor] = useState("");
+    const [goalError, setGoalError] = useState("");
+    const [colorError, setColorError] = useState("");
     const token = props.match.params.token;
 
+    const validateForms = () => {
+        return colorError === "" && goalError === "" ? true : false;
+    };
+
     const submitSettings = () => {
+        if (validateForms() == false) return false;
+
         fetch(`${url}/api/goal/update/${channel}`, {
             method: "POST",
             headers: {
@@ -88,8 +96,6 @@ export const Dashboard = (props) => {
             });
     };
 
-    const validateForms = () => {};
-
     useEffect(() => {
         //get initial values from db.
         fetch(`${url}/api/goal/match/${token}`)
@@ -123,6 +129,8 @@ export const Dashboard = (props) => {
                         setGoal={setGoal}
                         setName={setName}
                         name={name}
+                        error={goalError}
+                        setError={setGoalError}
                     />
 
                     <DisplayBar
@@ -150,6 +158,8 @@ export const Dashboard = (props) => {
                         setLayerOneColor={setLayerOneColor}
                         setLayerTwoColor={setLayerTwoColor}
                         setLayerThreeColor={setLayerThreeColor}
+                        error={colorError}
+                        setError={setColorError}
                     />
                 </div>
 
@@ -163,6 +173,7 @@ export const Dashboard = (props) => {
                         Defaults
                     </button>
                     <button
+                        type="button"
                         className="submitButton"
                         id="submitGoalSettings"
                         onFocus={submitSettings}

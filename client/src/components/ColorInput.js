@@ -11,6 +11,7 @@ export class ColorInput extends Component {
     }
 
     updateColor = (event, setColor) => {
+        this.validateColor(event.currentTarget.value);
         setColor(event.currentTarget.value);
     };
 
@@ -23,10 +24,21 @@ export class ColorInput extends Component {
     };
 
     handleChange = (color, event, setColor) => {
+        this.validateColor(color["hex"]);
         setColor(color["hex"]);
     };
 
     handleChangeComplete = () => {};
+
+    validateColor = (colorInput) => {
+        const colorRegex = /^\#([(a-f|\d)]{6}|[(a-f|\d)]{3})$/;
+
+        if (colorRegex.test(colorInput) == false) {
+            this.props.setError("Color not formatted correctly!");
+        } else {
+            this.props.setError("");
+        }
+    };
 
     render() {
         const labelText = this.props.label;
