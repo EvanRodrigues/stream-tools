@@ -1,9 +1,54 @@
 const express = require("express");
 const router = express.Router();
 const sockets = require("../../sockets");
-
 //Goal Model
 const Goal = require("../../models/Goal");
+
+const validateName = (nameInput) => {
+    if (!nameInput) return false;
+    if (typeof nameInput != "string") return false;
+    return nameInput.length > 0;
+};
+
+const validateDollars = (dollarInput) => {
+    if (!dollarInput) return false;
+
+    try {
+        //check if input is a number
+        dollarInput = dollarInput.toFixed(2);
+    } catch (err) {
+        return false;
+    }
+
+    const dollarRegex = /^\d+\.\d\d$/;
+    return dollarRegex.test(dollarInput);
+};
+
+const validateTokens = (tokenInput) => {
+    if (!tokenInput) return false;
+
+    if (typeof tokenInput != "string") return false;
+    if (tokenInput.length == 0) return false;
+
+    return true;
+};
+
+const validateColors = (colorInput) => {
+    if (!colorInput) return false;
+    const colorRegex = /^\#([(a-f|\d)]{6}|[(a-f|\d)]{3})$/;
+
+    try {
+        if (!colorRegex.test(colorInput["textColor"])) return false;
+        if (!colorRegex.test(colorInput["backgroundColor"])) return false;
+        if (!colorRegex.test(colorInput["layerOneColor"])) return false;
+        if (!colorRegex.test(colorInput["layerTwoColor"])) return false;
+        if (!colorRegex.test(colorInput["layerThreeColor"])) return false;
+    } catch (err) {
+        return false;
+    }
+
+    return true;
+};
 
 //@route    GET api/goal
 //@desc     Get all goals
@@ -50,6 +95,19 @@ router.get("/match/:token", (req, res) => {
 //@desc     Creates a new goal
 //@access   Public
 router.post("/", (req, res) => {
+    if (
+        !validateName(req.body.channel) ||
+        !validateDollars(req.body.progress) ||
+        !validateDollars(req.body.goal) ||
+        !validateName(req.body.name) ||
+        !validateTokens(req.body.accessToken) ||
+        !validateTokens(req.body.socketToken)
+    ) {
+        res.json({ error: "invalid input" });
+        res.status(400);
+        return;
+    }
+
     const newGoal = new Goal({
         channel: req.body.channel,
         progress: req.body.progress,
@@ -72,6 +130,9 @@ router.delete("/:id", (req, res) => {
         .catch((err) => res.status(404).json({ success: false })); //id not found
 });
 
+//@route    POST api/goal/reset/:channel
+//@desc     Resets the current goal to 0 dollars
+//@access   Public
 router.post("/reset/:channel", (req, res) => {
     Goal.findOne({ channel: req.params.channel }).then((goal) => {
         if (goal.accessToken == req.body.token) {
@@ -85,18 +146,14 @@ router.post("/reset/:channel", (req, res) => {
 //@desc     Updates the progress of the goal
 //@access   Public
 router.post("/updateProgress/:channel", (req, res) => {
+    if (!validateDollars(req.body.progress)) {
+        res.json({ error: "invalid input" });
+        res.status(400);
+        return;
+    }
+
     Goal.findOne({ channel: req.params.channel }).then((goal) => {
         goal.progress = req.body.progress;
-        goal.save().then((goal) => res.json(goal));
-    });
-});
-
-//@route    POST api/goal
-//@desc     Updates the progress of the goal
-//@access   Public
-router.post("/updateToken/:channel", (req, res) => {
-    Goal.findOne({ channel: req.params.channel }).then((goal) => {
-        goal.socketToken = req.body.socketToken;
         goal.save().then((goal) => res.json(goal));
     });
 });
@@ -105,6 +162,17 @@ router.post("/updateToken/:channel", (req, res) => {
 //@desc     Updates the entire goal based on :channel param.
 //@access   Public
 router.post("/update/:channel", (req, res) => {
+    if (
+        !validateDollars(req.body.progress) ||
+        !validateDollars(req.body.goal) ||
+        !validateName(req.body.name) ||
+        !validateColors(req.body.colors)
+    ) {
+        res.json({ error: "invalid input" });
+        res.status(400);
+        return;
+    }
+
     Goal.findOne({ channel: req.params.channel }).then((goal) => {
         goal.progress = req.body.progress;
         goal.goal = req.body.goal;
