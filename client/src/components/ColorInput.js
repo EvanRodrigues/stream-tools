@@ -31,9 +31,9 @@ export class ColorInput extends Component {
     handleChangeComplete = () => {};
 
     validateColor = (colorInput) => {
-        const colorRegex = /^\#([(a-f|\d)]{6}|[(a-f|\d)]{3})$/;
+        const colorRegex = /^#([(a-f|\d)]{6}|[(a-f|\d)]{3})$/;
 
-        if (colorRegex.test(colorInput) == false) {
+        if (colorRegex.test(colorInput) === false) {
             this.props.setError("Color not formatted correctly!");
         } else {
             this.props.setError("");

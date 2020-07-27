@@ -11,7 +11,7 @@ const validateName = (nameInput) => {
 };
 
 const validateDollars = (dollarInput) => {
-    if (!dollarInput) return false;
+    if (dollarInput == null) return false;
 
     try {
         //check if input is a number

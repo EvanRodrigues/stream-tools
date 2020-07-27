@@ -43,7 +43,7 @@ export const Dashboard = (props) => {
     };
 
     const submitSettings = () => {
-        if (validateForms() == false) return false;
+        if (validateForms() === false) return false;
 
         fetch(`${url}/api/goal/update/${channel}`, {
             method: "POST",
@@ -65,6 +65,7 @@ export const Dashboard = (props) => {
         })
             .then((response) => response.json())
             .then((json) => {
+                console.log(json);
                 window.location.reload();
             });
     };

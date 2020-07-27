@@ -8,7 +8,7 @@ export const GoalInput = (props) => {
                 className="barInput"
                 type="text"
                 name={props.name}
-                value={props.value}
+                defaultValue={props.value}
                 onChange={props.update}
             ></input>
         </div>

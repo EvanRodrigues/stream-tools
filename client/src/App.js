@@ -3,6 +3,7 @@ import "./App.css";
 import GoalBar from "./pages/GoalBar";
 import { Dashboard } from "./pages/Dashboard";
 import { Home } from "./pages/Home";
+import { LogIn } from "./pages/LogIn";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 function App() {
@@ -11,6 +12,7 @@ function App() {
             <div className="App">
                 <Switch>
                     <Route path="/" exact component={Home} />
+                    <Route path="/LogIn" component={LogIn} />
                     <Route path="/goal/:token" component={GoalBar} />
                     <Route path="/dashboard/:token" component={Dashboard} />
                 </Switch>
