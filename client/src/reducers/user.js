@@ -1,4 +1,4 @@
-const user = (state = "NULL", action) => {
+const user = (state = "", action) => {
     switch (action.type) {
         case "SET_USER":
             return action.payload;

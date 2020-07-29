@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { Redirect } from "react-router-dom";
 import { CLIENT_ID, CLIENT_SECRET } from "../config/keys";
+import { setUser } from "../actions/user";
+import { login } from "../actions/isLogged";
 
 export const LogIn = () => {
     const redirect_uri = `${window.location.origin}/LogIn`;
@@ -8,7 +12,8 @@ export const LogIn = () => {
     );
     const [loggedIn, setLoggedIn] = useState(false);
     const [accessToken, setAccessToken] = useState("");
-    const [user, setUser] = useState("");
+    const isLogged = useSelector((state) => state.isLogged);
+    const dispatch = useDispatch();
 
     useEffect(() => {
         let currentUrl = new URL(window.location.href);
@@ -31,14 +36,19 @@ export const LogIn = () => {
                     })
                         .then((response) => response.json())
                         .then((json) => {
-                            console.log(json);
-                            setUser(json["data"][0]["login"]);
-                            setLoggedIn(true);
-                            window.location.href = accessRedirect;
+                            dispatch(setUser(json["data"][0]["login"]));
+                            dispatch(login());
                         });
                 });
         }
     }, []);
 
-    return <></>;
+    if (isLogged === false) {
+        return <></>;
+    }
+    return (
+        <>
+            <Redirect to="/" />
+        </>
+    );
 };

@@ -20,8 +20,6 @@ export const Home = () => {
         return (
             <div>
                 <h1>YOU NEED TO LOG IN!</h1>
-                <button onClick={() => dispatch(setUser("doopian"))}>+</button>
-                <h2>{user}</h2>
                 <a href={url}>Log In</a>
             </div>
         );
@@ -30,7 +28,14 @@ export const Home = () => {
         <>
             <Nav />
             <h2>LOGGED IN AS: {user}</h2>
-            <a onClick={dispatch(logout)}>Log Out</a>
+            <a
+                onClick={() => {
+                    dispatch(setUser(""));
+                    dispatch(logout());
+                }}
+            >
+                Log Out
+            </a>
         </>
     );
 };
