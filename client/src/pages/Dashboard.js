@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
+import { createBrowserHistory } from "history";
 import "../stylesheets/css/dashboard.css";
 import { Nav } from "../components/Nav";
 import { DisplayBar } from "../components/DisplayBar";
@@ -25,7 +27,7 @@ const formatToDollars = (number) => {
 };
 
 export const Dashboard = (props) => {
-    const [channel, setChannel] = useState("");
+    const user = useSelector((state) => state.user); //Try to grab from cookie if not available as well.
     const [progress, setProgress] = useState(0.0);
     const [goal, setGoal] = useState(0.0);
     const [name, setName] = useState(null);
@@ -38,6 +40,19 @@ export const Dashboard = (props) => {
     const [colorError, setColorError] = useState("");
     const token = props.match.params.token;
 
+    const defaults = {
+        progress: 0,
+        goal: 100,
+        name: "Test Goal",
+        colors: {
+            textColor: "#000000",
+            backgroundColor: "#e6e6e6",
+            layerOneColor: "#00ff00",
+            layerTwoColor: "#ff3333",
+            layerThreeColor: "#cc00ff",
+        },
+    };
+
     const validateForms = () => {
         return colorError === "" && goalError === "" ? true : false;
     };
@@ -45,7 +60,7 @@ export const Dashboard = (props) => {
     const submitSettings = () => {
         if (validateForms() === false) return false;
 
-        fetch(`${url}/api/goal/update/${channel}`, {
+        fetch(`${url}/api/goal/update/${user}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -65,26 +80,13 @@ export const Dashboard = (props) => {
         })
             .then((response) => response.json())
             .then((json) => {
-                console.log(json);
-                window.location.reload();
+                const history = createBrowserHistory();
+                history.go(0);
             });
     };
 
     const submitDefaults = () => {
-        const defaults = {
-            progress: 0,
-            goal: 100,
-            name: "Test Goal",
-            colors: {
-                textColor: "#000000",
-                backgroundColor: "#e6e6e6",
-                layerOneColor: "#00ff00",
-                layerTwoColor: "#ff3333",
-                layerThreeColor: "#cc00ff",
-            },
-        };
-
-        fetch(`${url}/api/goal/update/${channel}`, {
+        fetch(`${url}/api/goal/update/${user}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -93,16 +95,16 @@ export const Dashboard = (props) => {
         })
             .then((response) => response.json())
             .then((json) => {
-                window.location.reload();
+                const history = createBrowserHistory();
+                history.go(0);
             });
     };
 
     useEffect(() => {
         //get initial values from db.
-        fetch(`${url}/api/goal/match/${token}`)
+        fetch(`${url}/api/goal/match/${user}`)
             .then((response) => response.json())
             .then((json) => {
-                setChannel(json["channel"]);
                 setProgress(json["progress"]);
                 setGoal(json["goal"]);
                 setName(json["name"]);
@@ -136,7 +138,7 @@ export const Dashboard = (props) => {
 
                     <DisplayBar
                         url={url}
-                        channel={channel}
+                        channel={user}
                         token={token}
                         progress={formatToDollars(progress)}
                         goal={formatToDollars(goal)}
@@ -167,6 +169,7 @@ export const Dashboard = (props) => {
                 <hr />
                 <div className="dashboardFooter">
                     <button
+                        type="button"
                         className="submitButton"
                         id="defaultSubmitButton"
                         onFocus={submitDefaults}

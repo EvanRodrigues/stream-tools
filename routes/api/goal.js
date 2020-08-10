@@ -77,8 +77,8 @@ router.get("/PING", (req, res) => {
 //@route    GET api/goal/match/:token
 //@desc     Get the goal that matches the access token
 //@access   Public
-router.get("/match/:token", (req, res) => {
-    Goal.findOne({ accessToken: req.params.token })
+router.get("/match/:user", (req, res) => {
+    Goal.findOne({ channel: req.params.user })
         .then((goal) => {
             res.json({
                 channel: goal.channel,

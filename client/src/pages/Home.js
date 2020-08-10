@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Nav } from "../components/Nav";
 import "../stylesheets/css/nav.css";
@@ -11,10 +11,7 @@ export const Home = () => {
     const redirect_uri = `${window.location.origin}/LogIn`;
     const isLogged = useSelector((state) => state.isLogged);
     const user = useSelector((state) => state.user);
-
-    const [url, setUrl] = useState(
-        `https://id.twitch.tv/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${redirect_uri}&response_type=code&scope=user:read:email`
-    );
+    const url = `https://id.twitch.tv/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${redirect_uri}&response_type=code&scope=user:read:email`;
 
     if (isLogged === false) {
         return (
