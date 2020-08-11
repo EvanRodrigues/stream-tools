@@ -1,11 +1,21 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
+import Cookies from "universal-cookie";
 import { Link } from "react-router-dom";
+import { setUser } from "../actions/user";
+import { logout } from "../actions/isLogged";
 
 export const Nav = () => {
     const user = useSelector((state) => state.user);
+    const dispatch = useDispatch();
 
-    const logout = () => {};
+    const logoutUser = () => {
+        dispatch(setUser(""));
+        dispatch(logout());
+
+        const cookies = new Cookies();
+        cookies.remove("streamToolsUser");
+    };
 
     return (
         <div id="nav">
@@ -13,17 +23,14 @@ export const Nav = () => {
                 <Link to="/">
                     <li className="navLink">Home</li>
                 </Link>
-                <Link to="/dashboard/123">
+                <Link to="/goal">
                     <li className="navLink">Goal</li>
                 </Link>
-                <Link to="/goal">
-                    <li className="navLink">Goal Dynamic</li>
-                </Link>
-                <li className="navLink">Emote Counter</li>
-                <li className="navLink">Foo</li>
-                <li className="navLink">Test</li>
                 <li className="loginInfo">
-                    {user} | <a id="navLogout">Logout</a>
+                    {user} |{" "}
+                    <a id="navLogout" onClick={logoutUser}>
+                        Logout
+                    </a>
                 </li>
             </ul>
         </div>

@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Redirect } from "react-router-dom";
+import Cookies from "universal-cookie";
 import { CLIENT_ID, CLIENT_SECRET } from "../config/keys";
 import { setUser } from "../actions/user";
 import { login } from "../actions/isLogged";
@@ -27,8 +28,12 @@ export const LogIn = () => {
                     })
                         .then((response) => response.json())
                         .then((json) => {
-                            dispatch(setUser(json["data"][0]["login"]));
+                            const user = json["data"][0]["login"];
+                            dispatch(setUser(user));
                             dispatch(login());
+                            const cookies = new Cookies();
+
+                            cookies.set("streamToolsUser", user, { path: "/" });
                         });
                 });
         }

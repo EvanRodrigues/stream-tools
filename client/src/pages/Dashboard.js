@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { createBrowserHistory } from "history";
+import { Redirect } from "react-router-dom";
+import Cookies from "universal-cookie";
 import "../stylesheets/css/dashboard.css";
 import { Nav } from "../components/Nav";
 import { DisplayBar } from "../components/DisplayBar";
 import { GoalSettings } from "../components/GoalSettings";
 import { ColorSettings } from "../components/ColorSettings";
+import { setUser } from "../actions/user";
+import { login } from "../actions/isLogged";
 
 const url =
     window.location.origin === "http://localhost:3000"
@@ -27,7 +31,7 @@ const formatToDollars = (number) => {
 };
 
 export const Dashboard = (props) => {
-    const user = useSelector((state) => state.user); //Try to grab from cookie if not available as well.
+    let user = useSelector((state) => state.user);
     const [progress, setProgress] = useState(0.0);
     const [goal, setGoal] = useState(0.0);
     const [name, setName] = useState(null);
@@ -38,7 +42,7 @@ export const Dashboard = (props) => {
     const [layerThreeColor, setLayerThreeColor] = useState("");
     const [goalError, setGoalError] = useState("");
     const [colorError, setColorError] = useState("");
-    const token = props.match.params.token;
+    const dispatch = useDispatch();
 
     const defaults = {
         progress: 0,
@@ -101,6 +105,16 @@ export const Dashboard = (props) => {
     };
 
     useEffect(() => {
+        if (user === "") {
+            const cookies = new Cookies();
+            user = cookies.get("streamToolsUser");
+
+            if (user != null) {
+                dispatch(setUser(user));
+                dispatch(login());
+            }
+        }
+
         //get initial values from db.
         fetch(`${url}/api/goal/match/${user}`)
             .then((response) => response.json())
@@ -118,7 +132,18 @@ export const Dashboard = (props) => {
             });
     }, []);
 
-    if (name === null) return <></>;
+    if (user === "" || user === null) {
+        return (
+            <>
+                <Redirect to="/" />
+            </>
+        );
+    } else if (name === null)
+        return (
+            <div id="content">
+                <Nav />
+            </div>
+        );
     return (
         <div id="content">
             <Nav />
@@ -128,10 +153,10 @@ export const Dashboard = (props) => {
                     <GoalSettings
                         progress={formatToTwoDecimals(progress)}
                         goal={formatToTwoDecimals(goal)}
+                        name={name}
                         setProgress={setProgress}
                         setGoal={setGoal}
                         setName={setName}
-                        name={name}
                         error={goalError}
                         setError={setGoalError}
                     />
@@ -139,7 +164,6 @@ export const Dashboard = (props) => {
                     <DisplayBar
                         url={url}
                         channel={user}
-                        token={token}
                         progress={formatToDollars(progress)}
                         goal={formatToDollars(goal)}
                         name={name}
