@@ -25,7 +25,7 @@ export const GoalSettings = (props) => {
     };
 
     const validateName = (nameInput) => {
-        if (nameInput.length == 0)
+        if (nameInput.length === 0)
             props.setError("Goal Name can not be empty!");
         else props.setError("");
     };
@@ -33,7 +33,7 @@ export const GoalSettings = (props) => {
     const validateDollars = (dollarInput) => {
         const dollarRegex = /^\d+\.\d\d$/;
 
-        if (dollarRegex.test(dollarInput) == false) {
+        if (dollarRegex.test(dollarInput) === false) {
             props.setError("Progress and Goal Target not formatted correctly!");
         } else {
             props.setError("");

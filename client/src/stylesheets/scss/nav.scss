@@ -1,4 +1,4 @@
-@import 'base';
+@import "base";
 
 #nav {
     height: 50px;
@@ -15,11 +15,18 @@
     align-items: center;
 }
 
-.navLink {
+.navLink,
+.loginInfo {
     color: $blue;
     list-style: none;
+    text-decoration: none;
 }
 
-.navLink:hover {
+.navLink:hover,
+#navLogout:hover {
     text-decoration: underline;
+}
+
+#navLogout:hover {
+    cursor: pointer;
 }

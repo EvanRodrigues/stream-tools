@@ -1,15 +1,37 @@
 import React from "react";
+import { useSelector, useDispatch } from "react-redux";
+import Cookies from "universal-cookie";
 import { Link } from "react-router-dom";
+import { setUser } from "../actions/user";
+import { logout } from "../actions/isLogged";
 
 export const Nav = () => {
+    const user = useSelector((state) => state.user);
+    const dispatch = useDispatch();
+
+    const logoutUser = () => {
+        dispatch(setUser(""));
+        dispatch(logout());
+
+        const cookies = new Cookies();
+        cookies.remove("streamToolsUser");
+    };
+
     return (
         <div id="nav">
             <ul className="linkContainer">
-                <li className="navLink">Home</li>
-                <li className="navLink">Goal</li>
-                <li className="navLink">Emote Counter</li>
-                <li className="navLink">Foo</li>
-                <li className="navLink">Test</li>
+                <Link to="/">
+                    <li className="navLink">Home</li>
+                </Link>
+                <Link to="/goal">
+                    <li className="navLink">Goal</li>
+                </Link>
+                <li className="loginInfo">
+                    {user} |{" "}
+                    <a id="navLogout" onClick={logoutUser}>
+                        Logout
+                    </a>
+                </li>
             </ul>
         </div>
     );

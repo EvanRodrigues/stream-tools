@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import ColorInput from "./ColorInput";
 import "../stylesheets/css/dashboard.css";
 
