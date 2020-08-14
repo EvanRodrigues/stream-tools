@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import Cookies from "universal-cookie";
 import { Nav } from "../components/Nav";
 import "../stylesheets/css/nav.css";
-import { CLIENT_ID } from "../config/keys";
+import { CLIENT_ID } from "../config/public/publicKeys";
 import { login } from "../actions/isLogged";
 import { setUser } from "../actions/user";
 

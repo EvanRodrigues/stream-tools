@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Redirect } from "react-router-dom";
 import io from "socket.io-client";
 import Cookies from "universal-cookie";
-import { CLIENT_ID, CLIENT_SECRET } from "../config/keys";
+import { CLIENT_ID } from "../config/public/publicKeys";
 import { setUser } from "../actions/user";
 import { login } from "../actions/isLogged";
 
