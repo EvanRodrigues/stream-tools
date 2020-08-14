@@ -4,7 +4,7 @@ import Cookies from "universal-cookie";
 import { Nav } from "../components/Nav";
 import "../stylesheets/css/nav.css";
 import { CLIENT_ID } from "../config/keys";
-import { login, logout } from "../actions/isLogged";
+import { login } from "../actions/isLogged";
 import { setUser } from "../actions/user";
 
 export const Home = () => {
@@ -35,15 +35,6 @@ export const Home = () => {
     return (
         <>
             <Nav />
-            <h2>LOGGED IN AS: {user}</h2>
-            <a
-                onClick={() => {
-                    dispatch(setUser(""));
-                    dispatch(logout());
-                }}
-            >
-                Log Out
-            </a>
         </>
     );
 };
