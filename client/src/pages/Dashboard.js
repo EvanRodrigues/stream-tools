@@ -1,40 +1,30 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { createBrowserHistory } from "history";
-import { Redirect } from "react-router-dom";
 import Cookies from "universal-cookie";
 import "../stylesheets/css/dashboard.css";
 import { Nav } from "../components/Nav";
+import { Login } from "../components/Login";
 import { DisplayBar } from "../components/DisplayBar";
 import { GoalSettings } from "../components/GoalSettings";
 import { ColorSettings } from "../components/ColorSettings";
 import { setUser } from "../actions/user";
 import { login } from "../actions/isLogged";
+import { setProgress, setTarget, setName } from "../actions/goal";
 
 const url =
     window.location.origin === "http://localhost:3000"
         ? "http://localhost:5000" //dev
         : window.location.origin; //live
 
-const formatToTwoDecimals = (number) => {
-    return number.toFixed(2);
-};
-
-const formatToDollars = (number) => {
-    //Default to $0.00 if input field is empty string
-    if (isNaN(number.toFixed(2))) {
-        const zero = 0.0;
-        return `$${zero.toFixed(2)}`;
-    }
-
-    return `$${number.toFixed(2)}`;
-};
-
 export const Dashboard = (props) => {
     let user = useSelector((state) => state.user);
-    const [progress, setProgress] = useState(0.0);
-    const [goal, setGoal] = useState(0.0);
-    const [name, setName] = useState(null);
+    let isFetched = useSelector((state) => state.isFetched);
+
+    let progress = useSelector((state) => state.goal.progress);
+    let target = useSelector((state) => state.goal.target);
+    let name = useSelector((state) => state.goal.name);
+
     const [textColor, setTextColor] = useState("");
     const [backgroundColor, setBackgroundColor] = useState("");
     const [layerOneColor, setLayerOneColor] = useState("");
@@ -57,6 +47,32 @@ export const Dashboard = (props) => {
         },
     };
 
+    const formatToTwoDecimals = (number) => {
+        number = parseFloat(number);
+        return number.toFixed(2);
+    };
+
+    const fetchUser = () => {
+        dispatch(setUser(user));
+        dispatch(login());
+
+        //get initial values from db.
+        fetch(`${url}/api/goal/match/${user}`)
+            .then((response) => response.json())
+            .then((json) => {
+                dispatch(setProgress(formatToTwoDecimals(json["progress"])));
+                dispatch(setTarget(formatToTwoDecimals(json["goal"])));
+                dispatch(setName(json["name"]));
+
+                const colors = json["colors"];
+                setTextColor(colors["textColor"]);
+                setBackgroundColor(colors["backgroundColor"]);
+                setLayerOneColor(colors["layerOneColor"]);
+                setLayerTwoColor(colors["layerTwoColor"]);
+                setLayerThreeColor(colors["layerThreeColor"]);
+            });
+    };
+
     const validateForms = () => {
         return colorError === "" && goalError === "" ? true : false;
     };
@@ -71,7 +87,7 @@ export const Dashboard = (props) => {
             },
             body: JSON.stringify({
                 progress: progress,
-                goal: goal,
+                goal: target,
                 name: name,
                 colors: {
                     textColor: textColor,
@@ -110,40 +126,19 @@ export const Dashboard = (props) => {
             user = cookies.get("streamToolsUser");
 
             if (user != null) {
-                dispatch(setUser(user));
-                dispatch(login());
+                fetchUser();
             }
         }
-
-        //get initial values from db.
-        fetch(`${url}/api/goal/match/${user}`)
-            .then((response) => response.json())
-            .then((json) => {
-                setProgress(json["progress"]);
-                setGoal(json["goal"]);
-                setName(json["name"]);
-
-                const colors = json["colors"];
-                setTextColor(colors["textColor"]);
-                setBackgroundColor(colors["backgroundColor"]);
-                setLayerOneColor(colors["layerOneColor"]);
-                setLayerTwoColor(colors["layerTwoColor"]);
-                setLayerThreeColor(colors["layerThreeColor"]);
-            });
     }, []);
 
-    if (user === "" || user === null) {
-        return (
-            <>
-                <Redirect to="/" />
-            </>
-        );
-    } else if (name === null)
-        return (
-            <div id="content">
-                <Nav />
-            </div>
-        );
+    /*
+     * If user goes to this page before logging in, the component will mount.
+     * useEffect will not fire twice, so this if statement fetches the user's data.
+     */
+    if (user != null && name === null) fetchUser();
+    else if (user === "" || user === null) {
+        return <Login />;
+    } else if (isFetched === false) return <div id="content"></div>;
     return (
         <div id="content">
             <Nav />
@@ -151,12 +146,9 @@ export const Dashboard = (props) => {
             <form id="settingsForm">
                 <div id="settings">
                     <GoalSettings
-                        progress={formatToTwoDecimals(progress)}
-                        goal={formatToTwoDecimals(goal)}
+                        progress={progress}
+                        target={target}
                         name={name}
-                        setProgress={setProgress}
-                        setGoal={setGoal}
-                        setName={setName}
                         error={goalError}
                         setError={setGoalError}
                     />
@@ -164,8 +156,8 @@ export const Dashboard = (props) => {
                     <DisplayBar
                         url={url}
                         channel={user}
-                        progress={formatToDollars(progress)}
-                        goal={formatToDollars(goal)}
+                        progress={progress}
+                        goal={target}
                         name={name}
                         textColor={textColor}
                         backgroundColor={backgroundColor}
