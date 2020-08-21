@@ -51,6 +51,7 @@ export const LogIn = () => {
 
                         cookies.set("streamToolsUser", user, {
                             path: "/",
+                            secure: true,
                             sameSite: "strict",
                         });
                         socket.disconnect();
