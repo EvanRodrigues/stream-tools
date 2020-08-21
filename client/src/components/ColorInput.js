@@ -1,6 +1,14 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import { SketchPicker } from "react-color";
 import onClickOutside from "react-onclickoutside";
+import {
+    setTextColor,
+    setBackgroundColor,
+    setLayerOneColor,
+    setLayerTwoColor,
+    setLayerThreeColor,
+} from "../actions/colors";
 
 export class ColorInput extends Component {
     constructor(props) {
@@ -10,9 +18,26 @@ export class ColorInput extends Component {
         };
     }
 
+    chooseSetter = (color) => {
+        switch (this.props.name) {
+            case "textColor":
+                return this.props.setTextColor(color);
+            case "backgroundColor":
+                return this.props.setBackgroundColor(color);
+            case "layerOneColor":
+                return this.props.setLayerOneColor(color);
+            case "layerTwoColor":
+                return this.props.setLayerTwoColor(color);
+            case "layerThreeColor":
+                return this.props.setLayerThreeColor(color);
+            default:
+                return;
+        }
+    };
+
     updateColor = (event, setColor) => {
+        this.chooseSetter(event.currentTarget.value);
         this.validateColor(event.currentTarget.value);
-        setColor(event.currentTarget.value);
     };
 
     open = () => {
@@ -23,9 +48,9 @@ export class ColorInput extends Component {
         this.setState({ ...this.state, isOpen: false });
     };
 
-    handleChange = (color, event, setColor) => {
+    handleChange = (color, event) => {
+        this.chooseSetter(color["hex"]);
         this.validateColor(color["hex"]);
-        setColor(color["hex"]);
     };
 
     handleChangeComplete = () => {};
@@ -78,4 +103,14 @@ export class ColorInput extends Component {
     }
 }
 
-export default onClickOutside(ColorInput);
+const mapDispatchToProps = (dispatch) => {
+    return {
+        setTextColor: (color) => dispatch(setTextColor(color)),
+        setBackgroundColor: (color) => dispatch(setBackgroundColor(color)),
+        setLayerOneColor: (color) => dispatch(setLayerOneColor(color)),
+        setLayerTwoColor: (color) => dispatch(setLayerTwoColor(color)),
+        setLayerThreeColor: (color) => dispatch(setLayerThreeColor(color)),
+    };
+};
+
+export default connect(null, mapDispatchToProps)(onClickOutside(ColorInput));

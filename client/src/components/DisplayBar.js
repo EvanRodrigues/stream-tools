@@ -1,6 +1,18 @@
 import React from "react";
 
 export const DisplayBar = (props) => {
+    const formatToDollars = (number) => {
+        number = parseFloat(number);
+
+        //Default to $0.00 if input field is empty string
+        if (isNaN(number.toFixed(2))) {
+            const zero = 0.0;
+            return `$${zero.toFixed(2)}`;
+        }
+
+        return `$${number.toFixed(2)}`;
+    };
+
     const resetBar = () => {
         const url = `${props.url}/api/goal/reset/${props.channel}`;
 
@@ -46,8 +58,10 @@ export const DisplayBar = (props) => {
                     </div>
 
                     <div id="barInfo" style={{ color: props.textColor }}>
-                        <span id="current">{props.progress}</span>
-                        <span id="goal">{props.goal}</span>
+                        <span id="current">
+                            {formatToDollars(props.progress)}
+                        </span>
+                        <span id="goal">{formatToDollars(props.goal)}</span>
                     </div>
                 </div>
             </div>

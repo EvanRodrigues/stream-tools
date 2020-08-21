@@ -15,6 +15,7 @@ const validateDollars = (dollarInput) => {
 
     try {
         //check if input is a number
+        dollarInput = parseFloat(dollarInput);
         dollarInput = dollarInput.toFixed(2);
     } catch (err) {
         return false;
