@@ -30,8 +30,8 @@ function App() {
     };
 
     const fetchUser = () => {
-        //Get cookie
-        user = cookies.get("streamToolsUser");
+        //Get cookie if user is not set
+        if (user == "") user = cookies.get("streamToolsUser");
 
         //Check if cookie is set
         if (user != null) {
@@ -61,7 +61,9 @@ function App() {
         fetchUser();
     }, []);
 
-    if (user != null && isFetched === false) fetchUser();
+    if (user != null && isFetched === false) {
+        fetchUser();
+    }
     return (
         <Router>
             <div className="App">

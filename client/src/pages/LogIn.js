@@ -49,7 +49,10 @@ export const LogIn = () => {
                         dispatch(login());
                         const cookies = new Cookies();
 
-                        cookies.set("streamToolsUser", user, { path: "/" });
+                        cookies.set("streamToolsUser", user, {
+                            path: "/",
+                            sameSite: "strict",
+                        });
                         socket.disconnect();
                     });
             });
