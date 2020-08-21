@@ -1,14 +1,17 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import "./App.css";
+import Cookies from "universal-cookie";
 import GoalBar from "./pages/GoalBar";
 import { Dashboard } from "./pages/Dashboard";
 import { Home } from "./pages/Home";
 import { LogIn } from "./pages/LogIn";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import { setColors } from "./actions/color";
+import { setColors } from "./actions/colors";
 import { setGoal } from "./actions/goal";
 import { fetched } from "./actions/isFetched";
+import { setUser } from "./actions/user";
+import { login } from "./actions/isLogged";
 
 const url =
     window.location.origin === "http://localhost:3000"
@@ -16,11 +19,10 @@ const url =
         : window.location.origin; //live
 
 function App() {
+    const cookies = new Cookies();
     let user = useSelector((state) => state.user);
     let isFetched = useSelector((state) => state.isFetched);
     let dispatch = useDispatch();
-
-    console.log(isFetched);
 
     const formatToTwoDecimals = (number) => {
         number = parseFloat(number);
@@ -28,29 +30,38 @@ function App() {
     };
 
     const fetchUser = () => {
-        //get initial values from db.
-        fetch(`${url}/api/goal/match/${user}`)
-            .then((response) => response.json())
-            .then((json) => {
-                dispatch(
-                    setGoal({
-                        progress: formatToTwoDecimals(json["progress"]),
-                        goal: formatToTwoDecimals(json["goal"]),
-                        name: json["name"],
-                    })
-                );
+        //Get cookie
+        user = cookies.get("streamToolsUser");
 
-                const colors = json["colors"];
-                dispatch(setColors(colors));
-                dispatch(fetched());
-            });
+        //Check if cookie is set
+        if (user != null) {
+            dispatch(setUser(user));
+            dispatch(login());
+
+            //Get initial values from db.
+            fetch(`${url}/api/goal/match/${user}`)
+                .then((response) => response.json())
+                .then((json) => {
+                    dispatch(
+                        setGoal({
+                            progress: formatToTwoDecimals(json["progress"]),
+                            target: formatToTwoDecimals(json["goal"]),
+                            name: json["name"],
+                        })
+                    );
+
+                    const colors = json["colors"];
+                    dispatch(setColors(colors));
+                    dispatch(fetched());
+                });
+        }
     };
 
     useEffect(() => {
         fetchUser();
     }, []);
 
-    if (user != null && isFetched == false) fetchUser();
+    if (user != null && isFetched === false) fetchUser();
     return (
         <Router>
             <div className="App">

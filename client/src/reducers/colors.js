@@ -1,4 +1,4 @@
-const color = (
+const colors = (
     state = {
         textColor: "#000000",
         backgroundColor: "#e6e6e6",
@@ -26,4 +26,4 @@ const color = (
     }
 };
 
-export default color;
+export default colors;

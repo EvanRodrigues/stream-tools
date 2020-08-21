@@ -35,7 +35,7 @@ export const setLayerTwoColor = (layerTwoColor) => {
 
 export const setLayerThreeColor = (layerThreeColor) => {
     return {
-        type: "SET__LAYER_THREE_COLOR",
+        type: "SET_LAYER_THREE_COLOR",
         payload: layerThreeColor,
     };
 };
