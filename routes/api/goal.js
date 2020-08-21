@@ -86,6 +86,22 @@ router.get("/match/:user", (req, res) => {
                 progress: goal.progress,
                 goal: goal.goal,
                 name: goal.name,
+                accessToken: goal.accessToken,
+                colors: goal.colors,
+            });
+        })
+        .catch((err) => res.status(404).json({ success: false })); //token not found;
+});
+
+router.get("/matchToken/:accessToken", (req, res) => {
+    Goal.findOne({ accessToken: req.params.accessToken })
+        .then((goal) => {
+            res.json({
+                channel: goal.channel,
+                progress: goal.progress,
+                goal: goal.goal,
+                name: goal.name,
+                accessToken: goal.accessToken,
                 colors: goal.colors,
             });
         })

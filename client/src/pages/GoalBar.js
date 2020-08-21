@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { createBrowserHistory } from "history";
 import { Transition } from "react-transition-group";
 import io from "socket.io-client";
 import "../stylesheets/css/goalBar.css";
@@ -52,13 +53,18 @@ class GoalBar extends Component {
         socket = io(`${socketUrl}?token=${token}`);
 
         socket.on("event", (eventData) => {
-            console.log(eventData);
             const amount = eventData["amount"];
             this.updateProgress(amount);
         });
 
+        //Refresh the page when receiving this event type.
+        socket.on("refresh", (eventData) => {
+            const history = createBrowserHistory();
+            history.go(0);
+        });
+
         //Needs to be based on props in future.
-        fetch(`${url}/api/goal/match/${token}`)
+        fetch(`${url}/api/goal/matchToken/${token}`)
             .then((response) => response.json())
             .then((json) => {
                 if (json["success"] != null) return;

@@ -7,11 +7,19 @@ import { Login } from "../components/Login";
 import { DisplayBar } from "../components/DisplayBar";
 import { GoalSettings } from "../components/GoalSettings";
 import { ColorSettings } from "../components/ColorSettings";
+import io from "socket.io-client";
 
 const url =
     window.location.origin === "http://localhost:3000"
         ? "http://localhost:5000" //dev
         : window.location.origin; //live
+
+const socketUrl =
+    window.location.origin === "http://localhost:3000"
+        ? "http://localhost:5001" //dev
+        : "https://stream-tools-socket.herokuapp.com/"; //live
+
+let socket;
 
 export const Dashboard = (props) => {
     let user = useSelector((state) => state.user);
@@ -20,6 +28,7 @@ export const Dashboard = (props) => {
     let progress = useSelector((state) => state.goal.progress);
     let target = useSelector((state) => state.goal.target);
     let name = useSelector((state) => state.goal.name);
+    let token = useSelector((state) => state.goal.accessToken);
 
     let textColor = useSelector((state) => state.colors.textColor);
     let backgroundColor = useSelector((state) => state.colors.backgroundColor);
@@ -71,6 +80,7 @@ export const Dashboard = (props) => {
         })
             .then((response) => response.json())
             .then((json) => {
+                socket.emit("refresh");
                 const history = createBrowserHistory();
                 history.go(0);
             });
@@ -88,12 +98,16 @@ export const Dashboard = (props) => {
             .then((json) => {
                 const history = createBrowserHistory();
                 history.go(0);
+                socket.emit("refresh");
             });
     };
 
+    if (socket == null && token != "") {
+        socket = io(`${socketUrl}?refresh=true&token=${token}`);
+    }
+
     /*
-     * If user goes to this page before logging in, the component will mount.
-     * useEffect will not fire twice, so this if statement fetches the user's data.
+     * If user goes to this page before logging in, they will be prompted to login.
      */
     if (user === "" || user === null) {
         return <Login />;

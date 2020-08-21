@@ -49,11 +49,13 @@ const GoalSchema = new Schema({
         required: true,
         default: "My Goal",
     },
+    //token for stream-tools
     accessToken: {
         type: String,
         required: true,
         default: "",
     },
+    //streamlabs socket token.
     socketToken: {
         type: String,
         required: true,
