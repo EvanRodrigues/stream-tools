@@ -7,12 +7,6 @@ import { CLIENT_ID } from "../config/public/publicKeys";
 import { setUser } from "../actions/user";
 import { login } from "../actions/isLogged";
 
-//TODO: Set up a socket with the backend.
-//send info for the login request to backend.
-//backend handles the request.
-//sends result to frontend.
-//this should work in development and production.
-
 const socketUrl =
     window.location.origin === "http://localhost:3000"
         ? "http://localhost:5001" //dev

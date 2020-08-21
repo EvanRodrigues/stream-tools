@@ -3,6 +3,7 @@ const goal = (
         progress: 0,
         target: 0,
         name: "",
+        accessToken: "",
     },
     action
 ) => {

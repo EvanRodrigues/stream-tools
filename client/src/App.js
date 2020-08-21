@@ -47,6 +47,7 @@ function App() {
                             progress: formatToTwoDecimals(json["progress"]),
                             target: formatToTwoDecimals(json["goal"]),
                             name: json["name"],
+                            accessToken: json["accessToken"],
                         })
                     );
 
@@ -70,7 +71,7 @@ function App() {
                 <Switch>
                     <Route path="/" exact component={Home} />
                     <Route path="/LogIn" component={LogIn} />
-                    <Route path="/goal" component={Dashboard} />
+                    <Route path="/goal" exact component={Dashboard} />
                     <Route path="/widgets/goal/:token" component={GoalBar} />
                     <Route path="/dashboard/:token" component={Dashboard} />
                 </Switch>
