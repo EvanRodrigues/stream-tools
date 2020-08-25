@@ -17,7 +17,7 @@ export const DisplayBar = (props) => {
         const url = `${props.url}/api/goal/reset/${props.channel}`;
 
         fetch(url, {
-            method: "POST",
+            method: "PUT",
             headers: {
                 "Content-Type": "application/json",
             },

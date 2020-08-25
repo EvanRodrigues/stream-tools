@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { createBrowserHistory } from "history";
 import "../stylesheets/css/dashboard.css";
 import { Nav } from "../components/Nav";
@@ -38,7 +38,6 @@ export const Dashboard = (props) => {
 
     const [goalError, setGoalError] = useState("");
     const [colorError, setColorError] = useState("");
-    const dispatch = useDispatch();
 
     const defaults = {
         progress: 0,
@@ -61,7 +60,7 @@ export const Dashboard = (props) => {
         if (validateForms() === false) return false;
 
         fetch(`${url}/api/goal/update/${user}`, {
-            method: "POST",
+            method: "PUT",
             headers: {
                 "Content-Type": "application/json",
             },
@@ -88,7 +87,7 @@ export const Dashboard = (props) => {
 
     const submitDefaults = () => {
         fetch(`${url}/api/goal/update/${user}`, {
-            method: "POST",
+            method: "PUT",
             headers: {
                 "Content-Type": "application/json",
             },
@@ -102,7 +101,7 @@ export const Dashboard = (props) => {
             });
     };
 
-    if (socket == null && token != "") {
+    if (socket == null && token !== "") {
         socket = io(`${socketUrl}?refresh=true&token=${token}`);
     }
 
@@ -116,7 +115,13 @@ export const Dashboard = (props) => {
         <div id="content">
             <Nav />
 
-            <form id="settingsForm">
+            <form
+                id="settingsForm"
+                onSubmit={(e) => {
+                    e.preventDefault();
+                    submitSettings();
+                }}
+            >
                 <div id="settings">
                     <GoalSettings
                         progress={progress}

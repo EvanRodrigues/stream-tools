@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import "./App.css";
 import Cookies from "universal-cookie";
@@ -31,7 +31,7 @@ function App() {
 
     const fetchUser = () => {
         //Get cookie if user is not set
-        if (user == "") user = cookies.get("streamToolsUser");
+        if (user === "") user = cookies.get("streamToolsUser");
 
         //Check if cookie is set
         if (user != null) {
@@ -57,10 +57,6 @@ function App() {
                 });
         }
     };
-
-    useEffect(() => {
-        fetchUser();
-    }, []);
 
     if (user != null && isFetched === false) {
         fetchUser();
