@@ -147,22 +147,22 @@ router.delete("/:id", (req, res) => {
         .catch((err) => res.status(404).json({ success: false })); //id not found
 });
 
-//@route    POST api/goal/reset/:channel
+//@route    PUT api/goal/reset/:channel
 //@desc     Resets the current goal to 0 dollars
 //@access   Public
-router.post("/reset/:channel", (req, res) => {
+router.put("/reset/:channel", (req, res) => {
     Goal.findOne({ channel: req.params.channel }).then((goal) => {
-        if (goal.accessToken == req.body.token) {
+        if (goal.channel == req.params.channel) {
             goal.progress = 0.0;
             goal.save().then((goal) => res.json(goal));
         }
     });
 });
 
-//@route    POST api/goal
+//@route    PUT api/goal
 //@desc     Updates the progress of the goal
 //@access   Public
-router.post("/updateProgress/:channel", (req, res) => {
+router.put("/updateProgress/:channel", (req, res) => {
     if (!validateDollars(req.body.progress)) {
         res.json({ error: "invalid input" });
         res.status(400);
@@ -175,10 +175,10 @@ router.post("/updateProgress/:channel", (req, res) => {
     });
 });
 
-//@route    GET api/goal/update/:channel
+//@route    PUT api/goal/update/:channel
 //@desc     Updates the entire goal based on :channel param.
 //@access   Public
-router.post("/update/:channel", (req, res) => {
+router.put("/update/:channel", (req, res) => {
     if (
         !validateDollars(req.body.progress) ||
         !validateDollars(req.body.goal) ||

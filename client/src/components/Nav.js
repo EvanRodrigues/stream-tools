@@ -28,9 +28,9 @@ export const Nav = () => {
                 </Link>
                 <li className="loginInfo">
                     {user} |{" "}
-                    <a id="navLogout" onClick={logoutUser}>
+                    <span id="navLogout" onClick={logoutUser}>
                         Logout
-                    </a>
+                    </span>
                 </li>
             </ul>
         </div>

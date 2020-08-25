@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { Redirect } from "react-router-dom";
 import io from "socket.io-client";
 import Cookies from "universal-cookie";
@@ -15,7 +15,7 @@ const socketUrl =
 let socket;
 
 export const LogIn = () => {
-    const isLogged = useSelector((state) => state.isLogged);
+    const [loggedIn, setLoggedIn] = useState(false);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -39,24 +39,23 @@ export const LogIn = () => {
                     .then((response) => response.json())
                     .then((json) => {
                         const user = json["data"][0]["login"];
-                        dispatch(setUser(user));
-                        dispatch(login());
                         const cookies = new Cookies();
 
                         cookies.set("streamToolsUser", user, {
                             path: "/",
-                            secure: true,
                             sameSite: "strict",
                         });
+
+                        dispatch(setUser(user));
+                        dispatch(login());
+                        setLoggedIn(true);
                         socket.disconnect();
                     });
             });
         }
-    }, []);
+    }, [dispatch]);
 
-    if (isLogged === false) {
-        return <></>;
-    }
+    if (loggedIn === false) return <></>;
     return (
         <>
             <Redirect to="/" />

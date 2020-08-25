@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useDispatch } from "react-redux";
 import { setProgress, setTarget, setName } from "../actions/goal";
 
@@ -12,9 +12,10 @@ export const GoalInput = (props) => {
     };
 
     const validateDollars = (dollarInput) => {
+        const isInt = Number.isInteger(Number(dollarInput));
         const dollarRegex = /^\d+\.\d\d$/;
 
-        if (dollarRegex.test(dollarInput) === false) {
+        if (dollarRegex.test(dollarInput) === false && isInt === false) {
             props.setError("Progress and Goal Target not formatted correctly!");
         } else {
             props.setError("");
