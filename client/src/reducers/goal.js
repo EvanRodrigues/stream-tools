@@ -4,6 +4,7 @@ const goal = (
         target: 0,
         name: "",
         accessToken: "",
+        tokenSet: false,
     },
     action
 ) => {

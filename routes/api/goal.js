@@ -81,12 +81,15 @@ router.get("/PING", (req, res) => {
 router.get("/match/:user", (req, res) => {
     Goal.findOne({ channel: req.params.user })
         .then((goal) => {
+            const tokenSet = goal.socketToken === "empty" ? false : true;
+
             res.json({
                 channel: goal.channel,
                 progress: goal.progress,
                 goal: goal.goal,
                 name: goal.name,
                 accessToken: goal.accessToken,
+                tokenSet: tokenSet,
                 colors: goal.colors,
             });
         })
@@ -112,27 +115,54 @@ router.get("/matchToken/:accessToken", (req, res) => {
 //@desc     Creates a new goal
 //@access   Public
 router.post("/", (req, res) => {
-    if (
-        !validateName(req.body.channel) ||
-        !validateDollars(req.body.progress) ||
-        !validateDollars(req.body.goal) ||
-        !validateName(req.body.name) ||
-        !validateTokens(req.body.accessToken) ||
-        !validateTokens(req.body.socketToken)
-    ) {
-        res.json({ error: "invalid input" });
+    if (!validateName(req.body.channel)) {
+        res.json({ error: "invalid channel name" });
         res.status(400);
         return;
     }
 
+    /*
+     * Generates a random alpha-numeric string with a length between 25 and 30 characters
+     */
+    const generateAccessToken = () => {
+        const availableChars =
+            "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        const limit = Math.random() * (30 - 25) + 25;
+        let accessToken = "";
+
+        for (let i = 0; i < limit; i++) {
+            accessToken +=
+                availableChars[
+                    Math.floor(Math.random() * availableChars.length)
+                ];
+        }
+
+        return accessToken;
+    };
+
+    const defaults = {
+        progress: 0,
+        goal: 100,
+        name: "Test Goal",
+        colors: {
+            textColor: "#000000",
+            backgroundColor: "#e6e6e6",
+            layerOneColor: "#00ff00",
+            layerTwoColor: "#ff3333",
+            layerThreeColor: "#cc00ff",
+        },
+    };
+
+    const accessToken = generateAccessToken();
+
     const newGoal = new Goal({
         channel: req.body.channel,
-        progress: req.body.progress,
-        goal: req.body.goal,
-        name: req.body.name,
-        accessToken: req.body.accessToken,
-        socketToken: req.body.socketToken,
-        colors: {},
+        progress: defaults.progress,
+        goal: defaults.goal,
+        name: defaults.name,
+        accessToken: accessToken,
+        socketToken: "empty",
+        colors: defaults.colors,
     });
 
     newGoal.save().then((item) => res.json(item));
@@ -154,6 +184,18 @@ router.put("/reset/:channel", (req, res) => {
     Goal.findOne({ channel: req.params.channel }).then((goal) => {
         if (goal.channel == req.params.channel) {
             goal.progress = 0.0;
+            goal.save().then((goal) => res.json(goal));
+        }
+    });
+});
+
+//@route    PUT api/goal/setSocketToken/:channel
+//@desc     Sets the StreamLabs socketToken of the channel's goal
+//@access   Public
+router.put("/setSocketToken/:channel", (req, res) => {
+    Goal.findOne({ channel: req.params.channel }).then((goal) => {
+        if (goal.channel == req.params.channel) {
+            goal.socketToken = req.body.socketToken;
             goal.save().then((goal) => res.json(goal));
         }
     });
