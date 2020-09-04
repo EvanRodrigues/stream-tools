@@ -4,8 +4,6 @@ import { Redirect } from "react-router-dom";
 import io from "socket.io-client";
 import Cookies from "universal-cookie";
 import { CLIENT_ID } from "../config/public/publicKeys";
-import { setUser } from "../actions/user";
-import { login } from "../actions/isLogged";
 
 const socketUrl =
     window.location.origin === "http://localhost:3000"
@@ -46,8 +44,6 @@ export const LogIn = () => {
                             sameSite: "strict",
                         });
 
-                        dispatch(setUser(user));
-                        dispatch(login());
                         setLoggedIn(true);
                         socket.disconnect();
                     });

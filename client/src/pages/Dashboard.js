@@ -4,6 +4,7 @@ import { createBrowserHistory } from "history";
 import "../stylesheets/css/dashboard.css";
 import { Nav } from "../components/Nav";
 import { Login } from "../components/Login";
+import { SocketTokenInput } from "../components/SocketTokenInput";
 import { DisplayBar } from "../components/DisplayBar";
 import { GoalSettings } from "../components/GoalSettings";
 import { ColorSettings } from "../components/ColorSettings";
@@ -23,12 +24,12 @@ let socket;
 
 export const Dashboard = (props) => {
     let user = useSelector((state) => state.user);
-    let isFetched = useSelector((state) => state.isFetched);
 
     let progress = useSelector((state) => state.goal.progress);
     let target = useSelector((state) => state.goal.target);
     let name = useSelector((state) => state.goal.name);
     let token = useSelector((state) => state.goal.accessToken);
+    let tokenSet = useSelector((state) => state.goal.tokenSet);
 
     let textColor = useSelector((state) => state.colors.textColor);
     let backgroundColor = useSelector((state) => state.colors.backgroundColor);
@@ -110,7 +111,13 @@ export const Dashboard = (props) => {
      */
     if (user === "" || user === null) {
         return <Login />;
-    } else if (isFetched === false) return <div id="content"></div>;
+    } else if (tokenSet === false)
+        return (
+            <div id="content">
+                <Nav />
+                <SocketTokenInput />
+            </div>
+        );
     return (
         <div id="content">
             <Nav />

@@ -1,27 +1,25 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import "./App.css";
 import Cookies from "universal-cookie";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import GoalBar from "./pages/GoalBar";
 import { Dashboard } from "./pages/Dashboard";
 import { Home } from "./pages/Home";
 import { LogIn } from "./pages/LogIn";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { setColors } from "./actions/colors";
 import { setGoal } from "./actions/goal";
-import { fetched } from "./actions/isFetched";
 import { setUser } from "./actions/user";
 import { login } from "./actions/isLogged";
+import "./App.css";
 
 const url =
     window.location.origin === "http://localhost:3000"
         ? "http://localhost:5000" //dev
         : window.location.origin; //live
 
-function App() {
+export const App = () => {
     const cookies = new Cookies();
     let user = useSelector((state) => state.user);
-    let isFetched = useSelector((state) => state.isFetched);
     let dispatch = useDispatch();
 
     const formatToTwoDecimals = (number) => {
@@ -42,25 +40,26 @@ function App() {
             fetch(`${url}/api/goal/match/${user}`)
                 .then((response) => response.json())
                 .then((json) => {
+                    if (json == null) return;
+
                     dispatch(
                         setGoal({
                             progress: formatToTwoDecimals(json["progress"]),
                             target: formatToTwoDecimals(json["goal"]),
                             name: json["name"],
                             accessToken: json["accessToken"],
+                            tokenSet: json["tokenSet"],
                         })
                     );
 
                     const colors = json["colors"];
                     dispatch(setColors(colors));
-                    dispatch(fetched());
                 });
         }
     };
 
-    if (user != null && isFetched === false) {
-        fetchUser();
-    }
+    useEffect(fetchUser, []);
+
     return (
         <Router>
             <div className="App">
@@ -74,6 +73,6 @@ function App() {
             </div>
         </Router>
     );
-}
+};
 
 export default App;
