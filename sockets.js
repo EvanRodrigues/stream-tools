@@ -86,6 +86,8 @@ const handleSocketEvent = (providerSocket, eventData, id) => {
 };
 
 const isIdInUse = (id) => {
+    if (id === null) return false;
+
     for (const [key, value] of streamLabsSockets.entries()) {
         if (streamLabsSockets.get(key) == id) return true;
     }
@@ -93,7 +95,7 @@ const isIdInUse = (id) => {
     return false;
 };
 
-module.exports.setUpSocket = (id) => {
+const setUpSocket = (id) => {
     if (isIdInUse(id)) {
         //Don't set up duplicate sockets.
         return;
@@ -131,3 +133,5 @@ module.exports.setUpSocket = (id) => {
 
     streamLabsSockets.set(socket, id);
 };
+
+module.exports = { setUpSocket, isIdInUse };
