@@ -1,0 +1,40 @@
+@import "base";
+
+#loginContainer {
+    padding: 20px;
+    background-color: $background-color;
+    width: 1000px;
+    text-align: center;
+}
+
+.site-info {
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+.site-info-entry {
+    margin-top: 25px;
+    margin-bottom: 25px;
+}
+
+.centeredLoginContainer {
+    height: calc(100% - 50px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.loginHeader {
+    color: $text-color;
+    margin-bottom: 15px;
+}
+
+.twitch-login-button {
+    cursor: pointer;
+    background-color: #9146ff;
+    color: $text-color;
+    border: none;
+    height: 35px;
+    width: 200px;
+    border-radius: 5px;
+}

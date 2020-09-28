@@ -87,10 +87,15 @@ export const Home = (props) => {
 
     useEffect(fetchUser, []);
 
-    if (isLogged === false) return <Login />;
+    if (isLogged === false)
+        return (
+            <div id="content">
+                <Login />
+            </div>
+        );
     return (
-        <>
+        <div id="content">
             <Nav />
-        </>
+        </div>
     );
 };
