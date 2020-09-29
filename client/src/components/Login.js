@@ -7,9 +7,9 @@ export const Login = () => {
     const url = `https://id.twitch.tv/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${redirectUri}&response_type=code&scope=user:read:email`;
 
     return (
-        <div class="centeredLoginContainer">
-            <div id="loginContainer">
-                <h1 className="loginHeader">Welcome to Stream Tools</h1>
+        <div class="centeredContainer loginContainer">
+            <div id="login">
+                <h1 className="loginHeader">Welcome to Stream Tools!</h1>
 
                 <div className="site-info">
                     <p className="text site-info-entry">

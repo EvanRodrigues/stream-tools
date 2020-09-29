@@ -1,10 +1,14 @@
 @import "base";
 
-#loginContainer {
+#login {
     padding: 20px;
     background-color: $background-color;
     width: 1000px;
     text-align: center;
+}
+
+.loginContainer {
+    height: calc(100% - 50px);
 }
 
 .site-info {
@@ -15,13 +19,6 @@
 .site-info-entry {
     margin-top: 25px;
     margin-bottom: 25px;
-}
-
-.centeredLoginContainer {
-    height: calc(100% - 50px);
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }
 
 .loginHeader {

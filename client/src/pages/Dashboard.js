@@ -110,7 +110,11 @@ export const Dashboard = (props) => {
      * If user goes to this page before logging in, they will be prompted to login.
      */
     if (user === "" || user === null) {
-        return <Login />;
+        return (
+            <div id="content">
+                <Login />
+            </div>
+        );
     } else if (tokenSet === false)
         return (
             <div id="content">

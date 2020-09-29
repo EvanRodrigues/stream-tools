@@ -106,8 +106,19 @@ hr {
     cursor: pointer;
 }
 
+.centeredContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .-active {
     display: block;
+}
+
+p {
+    margin-top: 25px;
+    margin-bottom: 25px;
 }
 
 a {
