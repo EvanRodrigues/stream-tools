@@ -1,0 +1,31 @@
+@import "base";
+
+.home-news {
+    vertical-align: top;
+    padding: 10px;
+    margin-top: 25px;
+    margin-bottom: 25px;
+
+    display: inline-block;
+
+    width: 47.5%;
+    color: $text-color;
+    background-color: $background-color;
+}
+
+.news-header {
+    text-align: center;
+    color: $blue;
+}
+
+.news-left {
+    margin-right: 2.5%;
+}
+
+.news-right {
+    margin-left: 2.5%;
+}
+
+.plans {
+    list-style-position: inside;
+}

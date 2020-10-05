@@ -1,0 +1,8 @@
+@import "base";
+
+#widgetUrl {
+    background-color: $background-color;
+    padding: 10px;
+    grid-column: 1/6;
+    grid-row: 1;
+}
