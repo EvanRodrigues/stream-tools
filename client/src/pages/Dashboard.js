@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { createBrowserHistory } from "history";
-import "../stylesheets/css/dashboard.css";
 import { Nav } from "../components/Nav";
 import { Login } from "../components/Login";
 import { SocketTokenInput } from "../components/SocketTokenInput";
@@ -9,6 +8,7 @@ import { DisplayBar } from "../components/DisplayBar";
 import { GoalSettings } from "../components/GoalSettings";
 import { ColorSettings } from "../components/ColorSettings";
 import io from "socket.io-client";
+import "../stylesheets/css/dashboard.css";
 
 const url =
     window.location.origin === "http://localhost:3000"
@@ -110,18 +110,24 @@ export const Dashboard = (props) => {
      * If user goes to this page before logging in, they will be prompted to login.
      */
     if (user === "" || user === null) {
-        return <Login />;
-    } else if (tokenSet === false)
         return (
             <div id="content">
-                <Nav />
-                <SocketTokenInput />
+                <Login />
             </div>
         );
+    } else if (tokenSet === false)
+        //setTimeout to avoid seeing the SocketTokenInput component every submit/refresh.
+        setTimeout(() => {
+            return (
+                <div id="content">
+                    <Nav />
+                    <SocketTokenInput />
+                </div>
+            );
+        }, 1000);
     return (
         <div id="content">
             <Nav />
-
             <form
                 id="settingsForm"
                 onSubmit={(e) => {
@@ -130,6 +136,13 @@ export const Dashboard = (props) => {
                 }}
             >
                 <div id="settings">
+                    <div id="widgetUrl" className="formContainer">
+                        <h1 className="url-header">Widget URL</h1>
+                        <div className="url-container">
+                            {`${window.location.origin}/widgets/goal/${token}`}
+                        </div>
+                    </div>
+
                     <GoalSettings
                         progress={progress}
                         target={target}
@@ -149,6 +162,7 @@ export const Dashboard = (props) => {
                         layerOneColor={layerOneColor}
                         layerTwoColor={layerTwoColor}
                         layerThreeColor={layerThreeColor}
+                        token={token}
                     />
 
                     <ColorSettings

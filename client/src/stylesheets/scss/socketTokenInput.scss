@@ -1,0 +1,26 @@
+@import "base";
+
+.socketTokenContainer {
+    height: calc(100% - 125px);
+}
+
+.socket-token {
+    color: $text-color;
+    width: 800px;
+    padding: 20px;
+    background-color: $background-color;
+}
+
+.socket-token-instructions {
+    margin-top: 25px;
+    margin-bottom: 25px;
+}
+
+.socket-token-steps {
+    list-style-position: inside;
+}
+
+.token-input {
+    margin-top: 2.5px;
+    width: 100%;
+}

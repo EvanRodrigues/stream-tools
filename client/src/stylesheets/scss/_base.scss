@@ -19,9 +19,16 @@ $dark-text-color: #181818;
 * {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    min-height: 100vh;
 }
 
 body {
+    height: 100vh;
     background-color: $background-color;
     width: 100%;
     font-family: "Roboto", sans-serif;
@@ -30,7 +37,7 @@ body {
 #content {
     padding: 25px;
     width: 85%;
-    min-height: calc(100vh - 50px);
+    min-height: 100vh;
     margin: auto;
     background-color: $section-color;
 }
@@ -52,7 +59,8 @@ input:-webkit-autofill {
     -webkit-text-fill-color: white !important;
 }
 
-h1 {
+h1,
+h2 {
     color: $text-color;
     font-weight: normal;
     text-align: center;
@@ -62,6 +70,14 @@ hr {
     border-color: $dark-text-color;
     margin-top: 25px;
     margin-bottom: 25px;
+}
+
+.text {
+    color: $text-color;
+}
+
+.link {
+    color: $blue;
 }
 
 .errorMessage {
@@ -90,8 +106,19 @@ hr {
     cursor: pointer;
 }
 
+.centeredContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .-active {
     display: block;
+}
+
+p {
+    margin-top: 25px;
+    margin-bottom: 25px;
 }
 
 a {

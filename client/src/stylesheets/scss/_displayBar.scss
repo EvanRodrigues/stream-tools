@@ -1,6 +1,8 @@
+@import "base";
+
 #exampleBar {
     grid-column: 3/6;
-    grid-row: 1;
+    grid-row: 2;
     min-height: 250px;
     padding: 10px;
     background-color: $background-color;
@@ -67,4 +69,29 @@
 
 #goal {
     float: right;
+}
+
+.sectionFooter {
+    display: flex;
+    justify-content: space-between;
+}
+
+.url-header {
+    color: $text-color;
+    text-align: center;
+}
+
+.url-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    overflow-x: auto;
+    font-size: 1.5rem;
+    background-color: $section-color;
+    color: $text-color;
+}
+
+.url-container::-webkit-scrollbar {
+    display: none;
 }
