@@ -10,6 +10,7 @@ import { setColors } from "./actions/colors";
 import { setGoal } from "./actions/goal";
 import { setUser } from "./actions/user";
 import { login } from "./actions/isLogged";
+import { setLoading } from "./actions/loading";
 import "./App.css";
 
 const url =
@@ -33,6 +34,7 @@ export const App = () => {
 
         //Check if cookie is set
         if (user != null) {
+            dispatch(setLoading(true));
             dispatch(setUser(user));
             dispatch(login());
 
@@ -54,6 +56,10 @@ export const App = () => {
 
                     const colors = json["colors"];
                     dispatch(setColors(colors));
+                    dispatch(setLoading(false));
+                })
+                .catch((err) => {
+                    dispatch(setLoading(false));
                 });
         }
     };

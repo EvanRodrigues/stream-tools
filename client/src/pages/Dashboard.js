@@ -22,7 +22,8 @@ const socketUrl =
 
 let socket;
 
-export const Dashboard = (props) => {
+export const Dashboard = () => {
+    let loading = useSelector((state) => state.loading);
     let user = useSelector((state) => state.user);
 
     let progress = useSelector((state) => state.goal.progress);
@@ -106,6 +107,10 @@ export const Dashboard = (props) => {
         socket = io(`${socketUrl}?refresh=true&token=${token}`);
     }
 
+    if (loading == true) {
+        return <></>;
+    }
+
     /*
      * If user goes to this page before logging in, they will be prompted to login.
      */
@@ -117,14 +122,12 @@ export const Dashboard = (props) => {
         );
     } else if (tokenSet === false)
         //setTimeout to avoid seeing the SocketTokenInput component every submit/refresh.
-        setTimeout(() => {
-            return (
-                <div id="content">
-                    <Nav />
-                    <SocketTokenInput />
-                </div>
-            );
-        }, 1000);
+        return (
+            <div id="content">
+                <Nav />
+                <SocketTokenInput />
+            </div>
+        );
     return (
         <div id="content">
             <Nav />
