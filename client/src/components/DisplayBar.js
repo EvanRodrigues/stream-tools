@@ -25,6 +25,7 @@ export const DisplayBar = (props) => {
         })
             .then((response) => response.json())
             .then((json) => {
+                props.socket.emit("refresh");
                 window.location.reload();
             });
     };

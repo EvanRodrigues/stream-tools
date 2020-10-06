@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
 import { Redirect } from "react-router-dom";
 import io from "socket.io-client";
 import Cookies from "universal-cookie";
@@ -14,7 +13,6 @@ let socket;
 
 export const LogIn = () => {
     const [loggedIn, setLoggedIn] = useState(false);
-    const dispatch = useDispatch();
 
     useEffect(() => {
         let currentUrl = new URL(window.location.href);
@@ -49,7 +47,7 @@ export const LogIn = () => {
                     });
             });
         }
-    }, [dispatch]);
+    }, []);
 
     if (loggedIn === false) return <></>;
     return (

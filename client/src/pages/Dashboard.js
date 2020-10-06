@@ -107,7 +107,7 @@ export const Dashboard = () => {
         socket = io(`${socketUrl}?refresh=true&token=${token}`);
     }
 
-    if (loading == true) {
+    if (loading === true) {
         return <></>;
     }
 
@@ -135,7 +135,6 @@ export const Dashboard = () => {
                 id="settingsForm"
                 onSubmit={(e) => {
                     e.preventDefault();
-                    submitSettings();
                 }}
             >
                 <div id="settings">
@@ -165,6 +164,7 @@ export const Dashboard = () => {
                         layerOneColor={layerOneColor}
                         layerTwoColor={layerTwoColor}
                         layerThreeColor={layerThreeColor}
+                        socket={socket}
                         token={token}
                     />
 
