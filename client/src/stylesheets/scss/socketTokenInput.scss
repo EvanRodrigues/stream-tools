@@ -20,7 +20,12 @@
     list-style-position: inside;
 }
 
+.socket-error {
+    display: block;
+    margin-top: 7.5px !important;
+}
+
 .token-input {
-    margin-top: 2.5px;
+    margin-top: 7.5px;
     width: 100%;
 }

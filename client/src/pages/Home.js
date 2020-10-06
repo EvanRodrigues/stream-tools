@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Cookies from "universal-cookie";
 import { Nav } from "../components/Nav";
@@ -7,6 +7,7 @@ import { setColors } from "../actions/colors";
 import { setGoal } from "../actions/goal";
 import { setUser } from "../actions/user";
 import { login } from "../actions/isLogged";
+import { setLoading } from "../actions/loading";
 import "../stylesheets/css/nav.css";
 import "../stylesheets/css/home.css";
 
@@ -19,7 +20,10 @@ export const Home = (props) => {
     const cookies = new Cookies();
     let user = useSelector((state) => state.user);
     let isLogged = useSelector((state) => state.isLogged);
+    let loading = useSelector((state) => state.loading);
     let dispatch = useDispatch();
+
+    const [mounting, setMounting] = useState(true);
 
     const formatToTwoDecimals = (number) => {
         number = parseFloat(number);
@@ -27,6 +31,8 @@ export const Home = (props) => {
     };
 
     const fetchUser = () => {
+        dispatch(setLoading(true));
+        setMounting(false);
         //Get cookie if user is not set
         if (user === "") user = cookies.get("streamToolsUser");
 
@@ -64,6 +70,9 @@ export const Home = (props) => {
 
                                 const colors = userJson["colors"];
                                 dispatch(setColors(colors));
+                            })
+                            .catch((err) => {
+                                dispatch(setLoading(false));
                             });
                     }
                 })
@@ -82,13 +91,21 @@ export const Home = (props) => {
 
                     const colors = json["colors"];
                     dispatch(setColors(colors));
+                    dispatch(setLoading(false));
+                })
+                .catch((err) => {
+                    dispatch(setLoading(false));
                 });
+        } else {
+            dispatch(setLoading(false));
         }
     };
 
     useEffect(fetchUser, []);
 
-    if (isLogged === false)
+    if (loading === true || mounting === true) {
+        return <></>;
+    } else if (isLogged === false)
         return (
             <div id="content">
                 <Login />

@@ -140,10 +140,8 @@ router.delete("/:id", (req, res) => {
 //@access   Public
 router.put("/reset/:channel", (req, res) => {
     Goal.findOne({ channel: req.params.channel }).then((goal) => {
-        if (goal.channel == req.params.channel) {
-            goal.progress = 0.0;
-            goal.save().then((goal) => res.json(goal));
-        }
+        goal.progress = 0;
+        goal.save().then((goal) => res.json(goal));
     });
 });
 

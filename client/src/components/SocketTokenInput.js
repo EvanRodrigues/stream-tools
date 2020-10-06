@@ -89,9 +89,9 @@ export const SocketTokenInput = () => {
 
                 <p>
                     <b class="link">
-                        NOTE: The Socket Token for your StreamLabs account is a
+                        The Socket Token for your StreamLabs account is a
                         private token, only input your token if you are
-                        comfortable with it potentially being compromised!
+                        comfortable with it being shared with me!
                     </b>
                 </p>
 
@@ -106,12 +106,18 @@ export const SocketTokenInput = () => {
                     <label class="formLabel">StreamLabs Socket API Token</label>
                     <input
                         type="password"
-                        class="formInput token-input"
+                        class={
+                            socketError !== ""
+                                ? "formInput token-input -active-error"
+                                : "formInput token-input"
+                        }
                         placeholder="Input token here"
                         onChange={handleChange}
                     ></input>
 
-                    <span className="error">{socketError}</span>
+                    <span className="socket-error errorMessage">
+                        {socketError}
+                    </span>
                     <hr />
                     <div className="dashboardFooter">
                         <button type="submit" class="submitButton">

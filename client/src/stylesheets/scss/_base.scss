@@ -2,11 +2,6 @@ $background-color: #181818;
 $section-color: rgba(33, 33, 33, 0.95);
 
 //$secondary-color: #468cde;
-//$green: #52d273;
-//$red: #e94f64;
-//$grey: #d6d8de;
-
-//$secondary-color: #468cde;
 $green: #00a300;
 $red: #fe2727;
 $yellow: #cc7000;
@@ -46,7 +41,7 @@ body {
     height: 100px;
 }
 
-/* Change the white to any color ;) */
+/* Change the white to any color */
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
@@ -54,7 +49,7 @@ input:-webkit-autofill:active {
     transition: background-color 5000s ease-in-out 0s;
 }
 
-/*Change text in autofill textbox*/
+/* Change text in autofill textbox */
 input:-webkit-autofill {
     -webkit-text-fill-color: white !important;
 }
@@ -78,6 +73,11 @@ hr {
 
 .link {
     color: $blue;
+}
+
+.-active-error {
+    outline: none;
+    box-shadow: 0 0 3pt 2pt red;
 }
 
 .errorMessage {
