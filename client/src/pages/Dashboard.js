@@ -9,6 +9,7 @@ import { GoalSettings } from "../components/GoalSettings";
 import { ColorSettings } from "../components/ColorSettings";
 import io from "socket.io-client";
 import "../stylesheets/css/dashboard.css";
+import { WidgetURL } from "../components/WidgetURL";
 
 const url =
     window.location.origin === "http://localhost:3000"
@@ -138,12 +139,9 @@ export const Dashboard = () => {
                 }}
             >
                 <div id="settings">
-                    <div id="widgetUrl" className="formContainer">
-                        <h1 className="url-header">Widget URL</h1>
-                        <div className="url-container">
-                            {`${window.location.origin}/widgets/goal/${token}`}
-                        </div>
-                    </div>
+                    <WidgetURL
+                        url={`${window.location.origin}/widgets/goal/${token}`}
+                    />
 
                     <GoalSettings
                         progress={progress}

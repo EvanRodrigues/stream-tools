@@ -6,6 +6,8 @@ import GoalBar from "./pages/GoalBar";
 import { Dashboard } from "./pages/Dashboard";
 import { Home } from "./pages/Home";
 import { LogIn } from "./pages/LogIn";
+import { ShowEmote } from "./pages/ShowEmote";
+import { ShowEmoteSettings } from "./pages/ShowEmoteSettings";
 import { setColors } from "./actions/colors";
 import { setGoal } from "./actions/goal";
 import { setUser } from "./actions/user";
@@ -73,7 +75,16 @@ export const App = () => {
                     <Route path="/" exact component={Home} />
                     <Route path="/LogIn" component={LogIn} />
                     <Route path="/goal" exact component={Dashboard} />
+                    <Route
+                        path="/ShowEmote"
+                        exact
+                        component={ShowEmoteSettings}
+                    />
                     <Route path="/widgets/goal/:token" component={GoalBar} />
+                    <Route
+                        path="/widgets/ShowEmote/:token"
+                        component={ShowEmote}
+                    ></Route>
                     <Route path="/dashboard/:token" component={Dashboard} />
                 </Switch>
             </div>
