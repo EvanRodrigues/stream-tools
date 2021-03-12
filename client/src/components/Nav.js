@@ -26,6 +26,9 @@ export const Nav = () => {
                 <Link to="/goal">
                     <li className="navLink">Goal Dashboard</li>
                 </Link>
+                <Link to="/ShowEmote">
+                    <li className="navLink">Show Emote</li>
+                </Link>
                 <li className="loginInfo">
                     {user} |{" "}
                     <span id="navLogout" onClick={logoutUser}>
