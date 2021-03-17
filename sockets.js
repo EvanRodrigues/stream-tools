@@ -101,15 +101,13 @@ const setUpSocket = (id) => {
         return;
     }
 
-    const socket = socketIoClient.connect(
-        `https://sockets.streamlabs.com?token=${id}`
-    );
+    const socket = socketIoClient(`https://sockets.streamlabs.com?token=${id}`);
 
-    const providerSocket = socketIoClient.connect(
+    const providerSocket = socketIoClient(
         `${providerUrl}?provider=${providerToken}`
     );
 
-    socket.on("connect", () => {
+    socket.on("connection", () => {
         console.log("connected");
     });
     socket.on("event", (eventData) => {
@@ -117,7 +115,7 @@ const setUpSocket = (id) => {
     });
     socket.on("disconnect", () => console.log("disconnected"));
 
-    providerSocket.on("connect", () => {
+    providerSocket.on("connection", () => {
         console.log("connected to provider!");
     });
     providerSocket.on("test_connection", (eventData) => {
