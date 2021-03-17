@@ -9,8 +9,6 @@ const socketUrl =
         ? "http://localhost:5001" //dev
         : "https://stream-tools-socket.herokuapp.com/"; //live
 
-let socket;
-
 export const LogIn = () => {
     const [loggedIn, setLoggedIn] = useState(false);
 
@@ -20,9 +18,11 @@ export const LogIn = () => {
         const redirectUri = `${window.location.origin}/LogIn`;
 
         if (code) {
-            socket = io(
-                `${socketUrl}?login=true&code=${code}&redirectUri=${redirectUri}`
+            const socket = io(
+                `${socketUrl}?login=true&code=${code}&redirectUri=${redirectUri}`,
+                { transport: ["websocket"] }
             );
+
             socket.on("userInfo", (eventData) => {
                 const accessToken = eventData.token;
 
