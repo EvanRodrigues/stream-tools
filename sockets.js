@@ -103,21 +103,24 @@ const setUpSocket = (id) => {
 
     const socket = socketIoClient(`https://sockets.streamlabs.com?token=${id}`);
 
+    socket.on("connection", () => {
+        console.log("connected");
+    });
+
+    socket.on("event", (eventData) => {
+        handleSocketEvent(providerSocket, eventData, id);
+    });
+
+    socket.on("disconnect", () => console.log("disconnected"));
+
     const providerSocket = socketIoClient(
         `${providerUrl}?provider=${providerToken}`
     );
 
-    socket.on("connection", () => {
-        console.log("connected");
-    });
-    socket.on("event", (eventData) => {
-        handleSocketEvent(providerSocket, eventData, id);
-    });
-    socket.on("disconnect", () => console.log("disconnected"));
-
     providerSocket.on("connection", () => {
         console.log("connected to provider!");
     });
+
     providerSocket.on("test_connection", (eventData) => {
         //GET REQUEST TO SERVER
         if (process.env.NODE_ENV === "production") {
@@ -125,6 +128,7 @@ const setUpSocket = (id) => {
             https.get(`https://stream-goal.herokuapp.com/api/goal/PING`);
         }
     });
+
     providerSocket.on("disconnect", () => {
         console.log("disconnected from provider!");
     });
