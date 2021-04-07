@@ -50,7 +50,9 @@ class GoalBar extends Component {
     componentDidMount() {
         const token = this.props.match.params.token;
 
-        socket = io(`${socketUrl}?token=${token}`);
+        socket = io(`${socketUrl}?token=${token}`, {
+            transport: ["websocket"],
+        });
 
         socket.on("event", (eventData) => {
             const amount = eventData["amount"];
